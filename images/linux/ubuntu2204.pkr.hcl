@@ -282,6 +282,7 @@ build {
     scripts          = [
                         "${path.root}/scripts/installers/action-archive-cache.sh",
                         "${path.root}/scripts/installers/apt-common.sh",
+                        "${path.root}/scripts/installers/java-tools.sh",
                         "${path.root}/scripts/installers/azcopy.sh",
                         "${path.root}/scripts/installers/azure-cli.sh",
                         "${path.root}/scripts/installers/azure-devops-cli.sh",
@@ -305,7 +306,6 @@ build {
                         "${path.root}/scripts/installers/google-cloud-cli.sh",
                         "${path.root}/scripts/installers/haskell.sh",
                         "${path.root}/scripts/installers/heroku.sh",
-                        "${path.root}/scripts/installers/java-tools.sh",
                         "${path.root}/scripts/installers/kubernetes-tools.sh",
                         "${path.root}/scripts/installers/oc.sh",
                         "${path.root}/scripts/installers/leiningen.sh",

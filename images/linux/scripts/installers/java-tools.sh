@@ -28,18 +28,50 @@ createJavaEnvironmentalVariable() {
 enableRepositories() {
     osLabel=$(getOSVersionLabel)
 
-    # Add Addoptium PPA
-    # apt-key is deprecated, dearmor and add manually
-    wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor > /usr/share/keyrings/adoptium.gpg
-    echo "deb [signed-by=/usr/share/keyrings/adoptium.gpg] https://packages.adoptium.net/artifactory/deb/ $osLabel main" > /etc/apt/sources.list.d/adoptium.list
+    # # Add Addoptium PPA
+    # # apt-key is deprecated, dearmor and add manually
+    # wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor > /usr/share/keyrings/adoptium.gpg
+    # echo "deb [signed-by=/usr/share/keyrings/adoptium.gpg] https://packages.adoptium.net/artifactory/deb/ $osLabel main" > /etc/apt/sources.list.d/adoptium.list
+    
+    apt-get install -y wget apt-transport-https
+    mkdir -p /etc/apt/keyrings
+    wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
+    echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://mirrors.tuna.tsinghua.edu.cn/Adoptium/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+    apt-get update
+    # echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+    # echo 'deb https://mirrors.sustech.edu.cn/Adoptium/deb jammy main' >> /etc/apt/sources.list.d/adoptium.list
 
 }
 
 installOpenJDK() {
     local JAVA_VERSION=$1
-
+    
+    apt-get update
+#     if [[ ${JAVA_VERSION} == "11" ]]; then
+#         curl -f -L -o temurin11.tar.gz https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.21%2B9/OpenJDK11U-debugimage_x64_linux_hotspot_11.0.21_9.tar.gz
+#         mkdir -p /usr/lib/jvm/temurin-11-jdk-amd64
+#         tar -xzf temurin11.tar.gz -C /usr/lib/jvm/temurin-11-jdk-amd64
+#         rm temurin11.tar.gz
+#         sudo cat <<EOL | sudo tee /usr/lib/jvm/.temurin-11-jdk-amd64.jinfo
+# name=temurin-11
+# alias=temurin-11
+# priority=110
+# section=non-free
+# family=Temurin
+# architecture=amd64
+# path=/usr/lib/jvm/temurin-11-jdk-amd64
+# EOL
+#     else
+#       
+        # apt-get install ca-certificates
+        # update-ca-certificates
+        # apt-get install -o 'Acquire::Retries=10' -y --no-install-recommends temurin-${JAVA_VERSION}-jdk --fix-missing
+    # fi
+    
     # Install Java from PPA repositories.
-    apt-get -y install temurin-${JAVA_VERSION}-jdk=\*
+    apt-get install ca-certificates
+    update-ca-certificates
+    apt-get -y install -o 'Acquire::Retries=30' temurin-${JAVA_VERSION}-jdk=\* --fix-missing
     javaVersionPath="/usr/lib/jvm/temurin-${JAVA_VERSION}-jdk-amd64"
 
     JAVA_TOOLCACHE_PATH="${AGENT_TOOLSDIRECTORY}/Java_Temurin-Hotspot_jdk"
