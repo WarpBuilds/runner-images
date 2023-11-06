@@ -123,21 +123,29 @@ packer {
 
 source "qemu" "build_image" {
   accelerator      = "kvm"
-  boot_command     = [
-    "${var.boot_command_prefix}",
-    "/install/vmlinuz noapic ",
-    "file=/floppy/preseed.cfg ",
-    "debian-installer en_US auto locale=en_US kbd-chooser/method=us ",
-    "hostname=${var.hostname} ",
-    "fb=false debconf/frontend=noninteractive ",
-    "keyboard-configuration/modelcode=SKIP ",
-    "keyboard-configuration/layout=USA ",
-    "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
-    "passwd/user-fullname=${var.ssh_username} ",
-    "passwd/username=${var.ssh_username} ",
-    "passwd/user-password=${var.ssh_password} ",
-    "passwd/user-password-again=${var.ssh_password} ",
-    "initrd=/install/initrd.gz -- <enter>"
+  # boot_command     = [
+  #   "${var.boot_command_prefix}",
+  #   "/install/vmlinuz noapic ",
+  #   "file=/floppy/preseed.cfg ",
+  #   "debian-installer en_US auto locale=en_US kbd-chooser/method=us ",
+  #   "hostname=${var.hostname} ",
+  #   "fb=false debconf/frontend=noninteractive ",
+  #   "keyboard-configuration/modelcode=SKIP ",
+  #   "keyboard-configuration/layout=USA ",
+  #   "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+  #   "passwd/user-fullname=${var.ssh_username} ",
+  #   "passwd/username=${var.ssh_username} ",
+  #   "passwd/user-password=${var.ssh_password} ",
+  #   "passwd/user-password-again=${var.ssh_password} ",
+  #   "initrd=/install/initrd.gz -- <enter>"
+  # ]
+  # Boot Commands when Loading the ISO file with OVMF.fd file (Tianocore) / GrubV2
+  boot_command = [
+      "<spacebar><wait><spacebar><wait><spacebar><wait><spacebar><wait><spacebar><wait>",
+      "e<wait>",
+      "<down><down><down><end>",
+      " autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/",
+      "<f10>"
   ]
   disk_compression = true
   disk_interface   = "virtio"
@@ -148,6 +156,9 @@ source "qemu" "build_image" {
   ]
   format           = var.format
   headless         = var.headless
+  # Location of Cloud-Init / Autoinstall Configuration files
+  # Will be served via an HTTP Server from Packer
+  http_directory   = "http"
   iso_url          = "https://releases.ubuntu.com/${var.ubuntu_version}/${var.ubuntu_iso_file}"
   iso_checksum     = "file:https://releases.ubuntu.com/${var.ubuntu_version}/SHA256SUMS"
   net_device       = "virtio-net"
@@ -169,6 +180,13 @@ source "qemu" "build_image" {
 
 build {
   sources = ["source.qemu.build_image"]
+  
+  # Wait till Cloud-Init has finished setting up the image on first-boot
+  provisioner "shell" {
+      inline = [
+          "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for Cloud-Init...'; sleep 1; done" 
+      ]
+  }
 
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
