@@ -1,0 +1,40 @@
+name: Build and Deploy
+
+on:
+  push:
+    tags:
+      - "*"
+    branches:
+      - "*"
+jobs:
+  build-image:
+    name: Build
+    runs-on: actuated
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install qemu
+        run: sudo apt-get update && sudo apt-get install qemu-system -y
+
+      - name: Setup packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Packer Init
+        run: |
+          cd images/linux
+          packer init ubuntu2204.qemu.pkr.hcl
+
+      - name: Packer Build
+        run: |
+          cd images/linux
+          sudo chmod o+rw /dev/kvm
+          make build-ubuntu2204
+
+      - name: Upload images and their SHA to Github Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: alexellis/upload-assets@0.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          asset_paths: '["./artifacts/qemu/*/*"]'
