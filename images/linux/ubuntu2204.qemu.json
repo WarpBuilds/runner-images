@@ -1,5 +1,7 @@
 {
   "variables": {
-    "version": "0.0.1"
+    "version": "0.0.1",
+    "ubuntu_version": "22.04",
+    "ubuntu_iso_file": "ubuntu-22.04.2-live-server-amd64.iso"
   }
 }
