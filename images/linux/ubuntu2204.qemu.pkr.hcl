@@ -179,7 +179,7 @@ source "qemu" "build_image" {
   shutdown_command       = "echo '${var.ssh_password}' | sudo -S shutdown -P now"
   ssh_password           = var.ssh_password
   ssh_username           = var.ssh_username
-  ssh_timeout            = "10m"
+  ssh_timeout            = "3h"
 }
 
 build {
