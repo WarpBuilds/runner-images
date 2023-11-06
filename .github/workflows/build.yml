@@ -5,7 +5,7 @@ on:
     tags:
       - "*"
     branches:
-      - "*"
+      - "fix/ubuntu2204-build-issues"
 jobs:
   build-image:
     name: Build
