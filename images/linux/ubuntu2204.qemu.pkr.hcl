@@ -52,6 +52,16 @@ variable "format" {
   default = "qcow2"
 }
 
+variable "dockerhub_login" {
+  type    = string
+  default = "${env("DOCKERHUB_LOGIN")}"
+}
+
+variable "dockerhub_password" {
+  type    = string
+  default = "${env("DOCKERHUB_PASSWORD")}"
+}
+
 variable "helper_script_folder" {
   type    = string
   default = "/imagegeneration/helpers"
