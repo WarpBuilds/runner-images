@@ -1,3 +1,8 @@
+variable "hostname" {
+  type    = string
+  default = "ubuntu"
+}
+
 variable "cpu" {
   type    = string
   default = "2"
@@ -113,11 +118,29 @@ packer {
 
 source "qemu" "build_image" {
   accelerator      = "kvm"
-  boot_command     = []
+  boot_command     = [
+    "${local.boot_command_prefix}",
+    "/install/vmlinuz noapic ",
+    "file=/floppy/preseed.cfg ",
+    "debian-installer en_US auto locale=en_US kbd-chooser/method=us ",
+    "hostname=${var.hostname} ",
+    "fb=false debconf/frontend=noninteractive ",
+    "keyboard-configuration/modelcode=SKIP ",
+    "keyboard-configuration/layout=USA ",
+    "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+    "passwd/user-fullname=${var.ssh_username} ",
+    "passwd/username=${var.ssh_username} ",
+    "passwd/user-password=${var.ssh_password} ",
+    "passwd/user-password-again=${var.ssh_password} ",
+    "initrd=/install/initrd.gz -- <enter>"
+  ]
   disk_compression = true
   disk_interface   = "virtio"
   disk_image       = true
   disk_size        = var.disk_size
+  floppy_files     = [
+    "${path.root}/http/preseed.cfg",
+  ]
   format           = var.format
   headless         = var.headless
   iso_url          = "https://releases.ubuntu.com/${var.ubuntu_version}/${var.ubuntu_iso_file}"
