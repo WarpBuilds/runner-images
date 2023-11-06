@@ -1,5 +1,6 @@
-local {
-  boot_command_prefix = "<esc><esc><enter><wait>"
+variable "boot_command_prefix" {
+  type    = string
+  default = "<esc><esc><enter><wait>"
 }
 
 variable "hostname" {
@@ -123,7 +124,7 @@ packer {
 source "qemu" "build_image" {
   accelerator      = "kvm"
   boot_command     = [
-    "${local.boot_command_prefix}",
+    "${var.boot_command_prefix}",
     "/install/vmlinuz noapic ",
     "file=/floppy/preseed.cfg ",
     "debian-installer en_US auto locale=en_US kbd-chooser/method=us ",
