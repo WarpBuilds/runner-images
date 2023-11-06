@@ -2,5 +2,4 @@
   "version": "0.0.1",
   "ubuntu_version": "jammy",
   "ubuntu_iso_file": "ubuntu-22.04.3-live-server-amd64.iso",
-  "boot_command_prefix": "<esc><esc><enter><wait>"
 }

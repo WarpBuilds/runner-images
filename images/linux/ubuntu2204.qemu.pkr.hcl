@@ -1,10 +1,10 @@
+local {
+  boot_command_prefix = "<esc><esc><enter><wait>"
+}
+
 variable "hostname" {
   type    = string
   default = "ubuntu"
-}
-
-variable "boot_command_prefix" {
-  type = string
 }
 
 variable "cpu" {
