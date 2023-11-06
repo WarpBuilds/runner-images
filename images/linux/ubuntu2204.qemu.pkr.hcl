@@ -169,8 +169,12 @@ source "qemu" "build_image" {
     # ["-machine", "accel=kvm"],
     ["-cpu", "host"],
     ["-smp", "cpus=${var.cpu}"],
+    ["-bios", "/usr/share/OVMF/OVMF_CODE.fd"]
     # ["-cdrom", "cidata.iso"]
   ]
+  efi_firmware_code = "/usr/share/OVMF/${lookup(local.ovmf_prefix, var.host_distro, "")}OVMF_CODE.fd"
+  efi_firmware_vars = "/usr/share/OVMF/${lookup(local.ovmf_prefix, var.host_distro, "")}OVMF_VARS.fd"
+  efi_boot          = true
   communicator           = "ssh"
   shutdown_command       = "echo '${var.ssh_password}' | sudo -S shutdown -P now"
   ssh_password           = var.ssh_password
