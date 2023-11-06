@@ -72,6 +72,11 @@ variable "image_folder" {
   default = "/imagegeneration"
 }
 
+variable "image_os" {
+  type    = string
+  default = "ubuntu22"
+}
+
 variable "image_version" {
   type    = string
   default = "dev"
