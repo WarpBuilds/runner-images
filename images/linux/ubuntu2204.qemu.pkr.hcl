@@ -3,6 +3,10 @@ variable "hostname" {
   default = "ubuntu"
 }
 
+variable "boot_command_prefix" {
+  type = string
+}
+
 variable "cpu" {
   type    = string
   default = "2"
