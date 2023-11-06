@@ -126,8 +126,11 @@ source "qemu" "build_image" {
   output_directory = "artifacts/qemu/${var.name}${var.version}"
   qemuargs = [
     ["-m", "${var.ram}M"],
-    ["-smp", "${var.cpu}"],
-    ["-cdrom", "cidata.iso"]
+    ["-display", "none"],
+    # ["-machine", "accel=kvm"],
+    ["-cpu", "host"],
+    ["-smp", "cpus=${var.cpu}"],
+    # ["-cdrom", "cidata.iso"]
   ]
   communicator           = "ssh"
   shutdown_command       = "echo '${var.ssh_password}' | sudo -S shutdown -P now"
