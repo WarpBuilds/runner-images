@@ -33,13 +33,13 @@ variable "github_api_pat" {
 }
 
 variable "vcpu_count" {
-  type = string
-  default = "6"
+  type = number
+  default = 6
 }
 
 variable "ram_size" {
-  type = string
-  default = "8G"
+  type = number
+  default = 8
 }
 
 variable "image_os" {
