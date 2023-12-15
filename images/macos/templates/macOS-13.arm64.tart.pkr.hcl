@@ -11,6 +11,10 @@ variable "vm_name" {
   type = string
 }
 
+variable "build_id" {
+  type = string
+}
+
 variable "vm_username" {
   type = string
   default = "admin"
@@ -29,13 +33,13 @@ variable "github_api_pat" {
 }
 
 variable "vcpu_count" {
-  type = number
-  default = 6
+  type = string
+  default = "6"
 }
 
 variable "ram_size" {
-  type = number
-  default = 8
+  type = string
+  default = "8G"
 }
 
 variable "image_os" {
@@ -69,33 +73,29 @@ build {
     ]
   }
   provisioner "file" {
-    destination = "image-generation/"
+    destination = "~/image-generation/"
     sources = [
-      "./provision/assets",
-      "./tests",
-      "./software-report",
-      "./helpers"
+      "./assets/xamarin-selector",
+      "./scripts/tests",
+      "./scripts/docs-gen",
+      "./scripts/helpers"
     ]
   }
   provisioner "file" {
-    destination = "image-generation/software-report/"
+    destination = "~/image-generation/docs-gen/"
     source = "../../helpers/software-report-base"
   }
   provisioner "file" {
-    destination = "image-generation/add-certificate.swift"
-    source = "./provision/configuration/add-certificate.swift"
+    destination = "~/image-generation/add-certificate.swift"
+    source = "./assets/add-certificate.swift"
   }
   provisioner "file" {
-    destination = ".bashrc"
-    source = "./provision/configuration/environment/bashrc"
+    destination = "~/.bashrc"
+    source = "./assets/bashrc"
   }
   provisioner "file" {
-    destination = ".bash_profile"
-    source = "./provision/configuration/environment/bashprofile"
-  }
-  provisioner "file" {
-    destination = "./"
-    source = "./provision/utils"
+    destination = "~/.bash_profile"
+    source = "./assets/bashprofile"
   }
   provisioner "shell" {
     inline = [
@@ -103,27 +103,27 @@ build {
     ]
   }
   provisioner "file" {
-    destination = "bootstrap"
-    source = "./provision/bootstrap-provisioner/"
+    destination = "~/bootstrap"
+    source = "./assets/bootstrap-provisioner"
   }
   provisioner "file" {
-    destination = "image-generation/toolset.json"
+    destination = "~/image-generation/toolset.json"
     source = "./toolsets/toolset-13.json"
   }
   provisioner "shell" {
     scripts = [
-      "./provision/core/xcode-clt.sh",
-      "./provision/core/homebrew.sh",
-      "./provision/core/rosetta.sh"
+      "./scripts/build/install-xcode-clt.sh",
+      "./scripts/build/install-homebrew.sh",
+      "./scripts/build/install-rosetta.sh"
     ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
   }
   provisioner "shell" {
     scripts = [
-      "./provision/configuration/configure-tccdb-macos.sh",
-      "./provision/configuration/disable-auto-updates.sh",
-      "./provision/configuration/ntpconf.sh",
-      "./provision/configuration/shell-change.sh"
+      "./scripts/build/configure-tccdb-macos.sh",
+      "./scripts/build/configure-auto-updates.sh",
+      "./scripts/build/configure-ntpconf.sh",
+      "./scripts/build/configure-shell.sh"
     ]
     environment_vars = [
       "PASSWORD=${var.vm_password}",
@@ -133,9 +133,9 @@ build {
   }
   provisioner "shell" {
     scripts = [
-      "./provision/configuration/preimagedata.sh",
-      "./provision/configuration/configure-ssh.sh",
-      "./provision/configuration/configure-machine.sh"
+      "./scripts/build/configure-preimagedata.sh",
+      "./scripts/build/configure-ssh.sh",
+      "./scripts/build/configure-machine.sh"
     ]
     environment_vars = [
       "IMAGE_VERSION=${var.build_id}",
@@ -145,24 +145,29 @@ build {
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
   }
   provisioner "shell" {
-    script  = "./provision/core/reboot.sh"
+    inline = [
+      "echo 'Reboot VM'",
+      "shutdown -r now"
+    ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; sudo {{ .Vars }} {{ .Path }}"
     expect_disconnect = true
   }
   provisioner "shell" {
     pause_before = "30s"
     scripts = [
-      "./provision/core/open_windows_check.sh",
-      "./provision/core/powershell.sh",
-      "./provision/core/mono.sh",
-      "./provision/core/dotnet.sh",
-      "./provision/core/azcopy.sh",
-      "./provision/core/openssl.sh",
-      "./provision/core/ruby.sh",
-      "./provision/core/rubygem.sh",
-      "./provision/core/git.sh",
-      "./provision/core/node.sh",
-      "./provision/core/commonutils.sh"
+      "./scripts/build/configure-windows.sh",
+        "./scripts/build/install-powershell.sh",
+        "./scripts/build/install-mono.sh",
+        "./scripts/build/install-dotnet.sh",
+        "./scripts/build/install-python.sh",
+        "./scripts/build/install-azcopy.sh",
+        "./scripts/build/install-openssl.sh",
+        "./scripts/build/install-ruby.sh",
+        "./scripts/build/install-rubygems.sh",
+        "./scripts/build/install-git.sh",
+        # "./scripts/build/install-mongodb.sh",
+        "./scripts/build/install-node.sh",
+        "./scripts/build/install-common-utils.sh"
     ]
     environment_vars = [
       "API_PAT=${var.github_api_pat}",
@@ -170,50 +175,53 @@ build {
     ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
   }
-  provisioner "shell" {
-    inline = [
-      "echo 'export PATH=/usr/local/bin/:$PATH' >> ~/.zprofile",
-      "source ~/.zprofile",
-      "wget --quiet https://github.com/RobotsAndPencils/xcodes/releases/latest/download/xcodes.zip",
-      "unzip xcodes.zip",
-      "rm xcodes.zip",
-      "chmod +x xcodes",
-      "sudo mkdir -p /usr/local/bin/",
-      "sudo mv xcodes /usr/local/bin/xcodes",
-      "xcodes version",
-      "wget --quiet https://storage.googleapis.com/xcodes-cache/Xcode_${var.xcode_version}.xip",
-      "xcodes install ${var.xcode_version} --experimental-unxip --path $PWD/Xcode_${var.xcode_version}.xip",
-      "sudo rm -rf ~/.Trash/*",
-      "xcodes select ${var.xcode_version}",
-      "xcodebuild -downloadAllPlatforms",
-      "xcodebuild -runFirstLaunch",
-    ]
-  }
   # provisioner "shell" {
-  #   script = "./provision/core/xcode.ps1"
-  #   environment_vars = [
-  #     "XCODE_INSTALL_STORAGE_URL=${var.xcode_install_storage_url}",
-  #     "XCODE_INSTALL_SAS=${var.xcode_install_sas}"
+  #   inline = [
+  #     "echo 'export PATH=/usr/local/bin/:$PATH' >> ~/.zprofile",
+  #     "source ~/.zprofile",
+  #     "wget --quiet https://github.com/RobotsAndPencils/xcodes/releases/latest/download/xcodes.zip",
+  #     "unzip xcodes.zip",
+  #     "rm xcodes.zip",
+  #     "chmod +x xcodes",
+  #     "sudo mkdir -p /usr/local/bin/",
+  #     "sudo mv xcodes /usr/local/bin/xcodes",
+  #     "xcodes version",
+  #     "wget --quiet https://storage.googleapis.com/xcodes-cache/Xcode_${var.xcode_version}.xip",
+  #     "xcodes install ${var.xcode_version} --experimental-unxip --path $PWD/Xcode_${var.xcode_version}.xip",
+  #     "sudo rm -rf ~/.Trash/*",
+  #     "xcodes select ${var.xcode_version}",
+  #     "xcodebuild -downloadAllPlatforms",
+  #     "xcodebuild -runFirstLaunch",
   #   ]
-  #   execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} pwsh -f {{ .Path }}"
   # }
   provisioner "shell" {
-    script = "./provision/core/reboot.sh"
+    script = "./provision/core/xcode.ps1"
+    environment_vars = [
+      "XCODE_INSTALL_STORAGE_URL=${var.xcode_install_storage_url}",
+      "XCODE_INSTALL_SAS=${var.xcode_install_sas}"
+    ]
+    execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} pwsh -f {{ .Path }}"
+  }
+  provisioner "shell" {
+    inline = [
+      "echo 'Reboot VM'",
+      "shutdown -r now"
+    ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; sudo {{ .Vars }} {{ .Path }}"
     expect_disconnect = true
   }
   provisioner "shell" {
     scripts = [
-      "./provision/core/action-archive-cache.sh",
-      "./provision/core/llvm.sh",
-      "./provision/core/openjdk.sh",
-      "./provision/core/rust.sh",
-      "./provision/core/gcc.sh",
-      "./provision/core/cocoapods.sh",
-      "./provision/core/safari.sh",
-      "./provision/core/chrome.sh",
-      "./provision/core/bicep.sh",
-      "./provision/core/codeql-bundle.sh"
+      "./scripts/build/install-actions-cache.sh",
+      "./scripts/build/install-llvm.sh",
+      "./scripts/build/install-openjdk.sh",
+      "./scripts/build/install-rust.sh",
+      "./scripts/build/install-gcc.sh",
+      "./scripts/build/install-cocoapods.sh",
+      "./scripts/build/install-safari.sh",
+      "./scripts/build/install-chrome.sh",
+      "./scripts/build/install-bicep.sh",
+      "./scripts/build/install-codeql-bundle.sh"
     ]
     environment_vars = [
       "API_PAT=${var.github_api_pat}"
@@ -222,13 +230,13 @@ build {
   }
   provisioner "shell" {
     scripts = [
-      "./provision/core/toolset.ps1",
-      "./provision/core/configure-toolset.ps1"
+      "./scripts/build/Install-Toolset.ps1",
+      "./scripts/build/Configure-Toolset.ps1"
     ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} pwsh -f {{ .Path }}"
   }
   provisioner "shell" {
-    script = "./provision/core/delete-duplicate-sims.rb"
+    script = "./scripts/build/configure-xcode-simulators.rb"
     execute_command = "source $HOME/.bash_profile; ruby {{ .Path }}"
   }
   provisioner "shell" {
@@ -245,7 +253,8 @@ build {
   }
   provisioner "shell" {
     scripts = [
-      "./provision/configuration/configure-hostname.sh"
+      "./scripts/build/configure-hostname.sh",
+      "./scripts/build/configure-system.sh"
     ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
   }
