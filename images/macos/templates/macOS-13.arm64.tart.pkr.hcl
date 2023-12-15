@@ -121,6 +121,18 @@ build {
     source = "./toolsets/toolset-13.json"
   }
   provisioner "shell" {
+    inline = [
+      "mv ~/image-generation/docs-gen ~/image-generation/software-report",
+      "mv ~/image-generation/xamarin-selector ~/image-generation/assets",
+      "mkdir ~/utils",
+      "mv ~/image-generation/helpers/confirm-identified-developers.scpt ~/utils",
+      "mv ~/image-generation/helpers/invoke-tests.sh ~/utils",
+      "mv ~/image-generation/helpers/utils.sh ~/utils",
+      "mv ~/image-generation/helpers/xamarin-utils.sh ~/utils"
+    ]
+    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+  }
+  provisioner "shell" {
     scripts = [
       "./scripts/build/install-xcode-clt.sh",
       "./scripts/build/install-homebrew.sh",
