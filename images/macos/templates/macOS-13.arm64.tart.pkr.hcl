@@ -47,9 +47,19 @@ variable "image_os" {
   default = "macos13"
 }
 
-variable "xcode_version" {
+# variable "xcode_version" {
+#   type = string
+#   default = "15.1"
+# }
+
+variable "xcode_install_storage_url" {
   type = string
-  default = "15.1"
+  default = ""
+}
+
+variable "xcode_install_sas" {
+  type = string
+  default = ""
 }
 
 source "tart-cli" "tart" {
