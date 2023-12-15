@@ -233,6 +233,7 @@ build {
     expect_disconnect = true
   }
   provisioner "shell" {
+    pause_before = "30s"
     scripts = [
       "./scripts/build/install-actions-cache.sh",
       "./scripts/build/install-llvm.sh",
