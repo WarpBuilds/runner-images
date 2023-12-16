@@ -449,6 +449,11 @@ build {
   # }
   provisioner "shell" {
     inline = [
+      mkdir /Library/Application\ Support/Tart
+    ]
+  }
+  provisioner "shell" {
+    inline = [
       # "pwsh -File \"$HOME/image-generation/software-report/Generate-SoftwareReport.ps1\" -OutputDirectory \"$HOME/image-generation/output/software-report\" -ImageName ${var.build_id}",
       "pwsh -File \"$HOME/image-generation/tests/RunAll-Tests.ps1\""
     ]
