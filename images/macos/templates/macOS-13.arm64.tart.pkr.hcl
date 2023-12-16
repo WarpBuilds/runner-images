@@ -449,7 +449,8 @@ build {
   # }
   provisioner "shell" {
     inline = [
-      "mkdir ~/image-generation/tart"
+      "sudo mkdir -p /Library/Application\\ Support/Tart",
+      "sudo chown $(whoami) /Library/Application\\ Support/Tart"
     ]
   }
   provisioner "shell" {

@@ -40,6 +40,10 @@ Describe "Audio device" -Skip:($os.IsVentura -or $os.IsSonoma) {
 }
 
 Describe "Screen Resolution" -Skip:(isVeertu) {
+    # log isVeertu value
+    Write-Host "isVeertu: $isVeertu"
+    # log screen resolution
+    system_profiler SPDisplaysDataType | Select-String "Resolution" | Tee-Object /tmp/screen_resolution.txt
     It "Screen Resolution" {
         system_profiler SPDisplaysDataType | Select-String "Resolution" | Should -Match "1176 x 885|1920 x 1080|1024 x 768"
     }
