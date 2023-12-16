@@ -346,7 +346,8 @@ build {
   provisioner "shell" {
     scripts = [
       "./scripts/build/install-xcode-clt.sh",
-      "./scripts/build/install-homebrew.sh"
+      "./scripts/build/install-homebrew.sh",
+      "./scripts/build/install-rosetta.sh"
     ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
   }
@@ -388,7 +389,6 @@ build {
       "./scripts/build/install-powershell.sh",
       "./scripts/build/install-mono.sh",
       "./scripts/build/install-dotnet.sh",
-      "./scripts/build/install-python.sh",
       "./scripts/build/install-azcopy.sh",
       "./scripts/build/install-openssl.sh",
       "./scripts/build/install-ruby.sh",
@@ -420,21 +420,14 @@ build {
     scripts = [
       "./scripts/build/install-actions-cache.sh",
       "./scripts/build/install-llvm.sh",
-      "./scripts/build/install-swiftlint.sh",
       "./scripts/build/install-openjdk.sh",
-      "./scripts/build/install-php.sh",
       "./scripts/build/install-aws-tools.sh",
       "./scripts/build/install-rust.sh",
       "./scripts/build/install-gcc.sh",
       "./scripts/build/install-cocoapods.sh",
       "./scripts/build/install-android-sdk.sh",
-      "./scripts/build/install-apache.sh",
-      "./scripts/build/install-vcpkg.sh",
       "./scripts/build/install-safari.sh",
       "./scripts/build/install-chrome.sh",
-      "./scripts/build/install-edge.sh",
-      "./scripts/build/install-firefox.sh",
-      "./scripts/build/install-pypy.sh",
       "./scripts/build/install-bicep.sh",
       "./scripts/build/install-codeql-bundle.sh"
     ]
@@ -467,14 +460,8 @@ build {
     source = "./image-generation/output/"
   }
   provisioner "shell" {
-    inline = [
-      "rm -rf \"$(brew --cache)\""
-    ]
-  }
-  provisioner "shell" {
     scripts = [
-      "./scripts/build/configure-hostname.sh",
-      "./scripts/build/configure-system.sh"
+      "./scripts/build/configure-hostname.sh"
     ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
   }
