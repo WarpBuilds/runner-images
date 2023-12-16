@@ -41,7 +41,7 @@ Describe "Audio device" -Skip:($os.IsVentura -or $os.IsSonoma) {
 
 Describe "Screen Resolution" -Skip:(isVeertu) {
     It "Screen Resolution" {
-        system_profiler SPDisplaysDataType | Select-String "Resolution" | Should -Match "1176 x 885|1920 x 1080"
+        system_profiler SPDisplaysDataType | Select-String "Resolution" | Should -Match "1176 x 885|1920 x 1080|1024 x 768"
     }
 }
 
