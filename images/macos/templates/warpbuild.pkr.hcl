@@ -47,7 +47,7 @@ source "tart-cli" "tart" {
   vm_name      = "${var.vm_name}"
   cpu_count    = var.vcpu_count
   memory_gb    = var.ram_size
-  disk_size_gb = 150
+  disk_size_gb = 200
   headless     = true
   ssh_password = var.vm_password
   ssh_username = var.vm_username
