@@ -39,23 +39,21 @@ Describe "Audio device" -Skip:($os.IsVentura -or $os.IsSonoma) {
     }
 }
 
-# TODO: this test shouldn't run on veertu or other headless VMs
-# TODO: figure out the problem. Skip for now.
-# Describe "Screen Resolution" -Skip:(isVeertu) {
-#     system_profiler SPDisplaysDataType | Select-String "Resolution" | Tee-Object /tmp/screen_resolution.txt
-#     It "Screen Resolution" {
-#         system_profiler SPDisplaysDataType | Select-String "Resolution" | Should -Match "1176 x 885|1920 x 1080|1024 x 768"
-#     }
-# }
+Describe "Screen Resolution" -Skip:(isVeertu) {
+    system_profiler SPDisplaysDataType | Select-String "Resolution" | Tee-Object /tmp/screen_resolution.txt
+    It "Screen Resolution" {
+        system_profiler SPDisplaysDataType | Select-String "Resolution" | Should -Match "1176 x 885|1920 x 1080|1024 x 768"
+    }
+}
 
-# Describe "Open windows" -Skip:(isVeertu) {
-#     It "Opened windows not found" {
-#         'tell application id "com.apple.systemevents" to get every window of (every process whose class of windows contains window)' | Tee-Object /tmp/windows.osascript
-#         $cmd = "osascript /tmp/windows.osascript"
-#         $openWindows = bash -c $cmd
-#         $openWindows.Split(",").Trim() | Where-Object { $_ -notmatch "NotificationCenter" } | Should -BeNullOrEmpty
-#     }
-# }
+Describe "Open windows" -Skip:(isVeertu) {
+    It "Opened windows not found" {
+        'tell application id "com.apple.systemevents" to get every window of (every process whose class of windows contains window)' | Tee-Object /tmp/windows.osascript
+        $cmd = "osascript /tmp/windows.osascript"
+        $openWindows = bash -c $cmd
+        $openWindows.Split(",").Trim() | Where-Object { $_ -notmatch "NotificationCenter" } | Should -BeNullOrEmpty
+    }
+}
 
 Describe "AutomationModeTool" {
     It "Does not require user authentication" -Skip:($os.IsBigSur) {
