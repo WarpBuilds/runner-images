@@ -449,8 +449,9 @@ build {
   # }
   provisioner "shell" {
     inline = [
-      mkdir /Library/Application\ Support/Tart
+      mkdir "/Library/Application\ Support/Tart"
     ]
+    execute_command = "source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
   }
   provisioner "shell" {
     inline = [
