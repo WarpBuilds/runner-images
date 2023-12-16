@@ -9,7 +9,7 @@ source ~/utils/utils.sh
 echo "Creating warpbuild directories ..."
 mkdir -p ~/.warpbuild/agent
 
-BASE_DIR=~/.warpbuild/agent
+BASE_DIR=$(echo ~/.warpbuild/agent)
 VERSION=v0.2.0-alpha.1
 
 echo "Downloading warpbuild-agentd $VERSION..."
@@ -33,7 +33,7 @@ cat << EOF > $BASE_DIR/com.warpbuild.warpbuild-agentd.plist
     <key>ProgramArguments</key>
     <array>
         <string>/usr/local/bin/warpbuild-agentd</string>
-        <string>--settings=~/.warpbuild/agent/settings.json</string>
+        <string>--settings=$BASE_DIR/settings.json</string>
     </array>
     <key>WorkingDirectory</key>
     <string>/</string>
@@ -42,9 +42,9 @@ cat << EOF > $BASE_DIR/com.warpbuild.warpbuild-agentd.plist
     <key>KeepAlive</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>~/.warpbuild/agent/log/warpbuild-agentd.error.log</string>
+    <string>$BASE_DIR/log/warpbuild-agentd.error.log</string>
     <key>StandardOutPath</key>
-    <string>~/.warpbuild/agent/log/warpbuild-agentd.out.log</string>
+    <string>$BASE_DIR/log/warpbuild-agentd.out.log</string>
     <key>ThrottleInterval</key>
     <integer>5</integer>
 </dict>
