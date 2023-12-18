@@ -11,6 +11,7 @@ mkdir -p ~/.warpbuild/agent
 
 BASE_DIR=$(echo ~/.warpbuild/agent)
 VERSION=v0.2.0-alpha.1
+USERNAME=$(whoami)
 
 echo "Downloading warpbuild-agentd $VERSION..."
 curl -f -L -o $BASE_DIR/warpbuild-agentd.tar.gz https://github.com/WarpBuilds/warpbuild-agent/releases/download/$VERSION/warpbuild-agentd_Darwin_arm64.tar.gz
@@ -35,6 +36,8 @@ cat << EOF > $BASE_DIR/com.warpbuild.warpbuild-agentd.plist
         <string>/usr/local/bin/warpbuild-agentd</string>
         <string>--settings=$BASE_DIR/settings.json</string>
     </array>
+    <key>UserName</key>
+    <string>$USERNAME</string>
     <key>WorkingDirectory</key>
     <string>/</string>
     <key>RunAtLoad</key>
