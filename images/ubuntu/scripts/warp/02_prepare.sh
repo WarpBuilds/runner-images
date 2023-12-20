@@ -32,3 +32,6 @@ systemctl daemon-reload
 # remove grub configuration file which is forcing hardcoded bootup grub part UUID
 rm /etc/default/grub.d/40-force-partuuid.cfg
 update-grub
+
+
+# fstrim -v /

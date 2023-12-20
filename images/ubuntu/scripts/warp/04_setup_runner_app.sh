@@ -10,5 +10,3 @@ curl -f -L -o runner-container-hooks.zip https://github.com/actions/runner-conta
         && rm runner-container-hooks.zip
 
 export DEBIAN_FRONTEND=noninteractive
-export RUNNER_MANUALLY_TRAP_SIG=1
-export ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1
