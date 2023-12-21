@@ -24,6 +24,7 @@ sudo chmod +x /usr/local/bin/warpbuild-agentd
 
 echo "Configuring agent ..."
 
+echo "Adding launcher"
 cat << EOF > $BASE_DIR/warpbuild-agentd-launcher.sh
 #!/bin/bash
 
@@ -31,6 +32,11 @@ cat << EOF > $BASE_DIR/warpbuild-agentd-launcher.sh
 
 /usr/local/bin/warpbuild-agentd --settings=$BASE_DIR/settings.json
 EOF
+
+chmod +x $BASE_DIR/warpbuild-agentd-launcher.sh
+mv $BASE_DIR/warpbuild-agentd-launcher.sh /usr/local/bin/warpbuild-agentd-launcher.sh
+
+echo "Adding launchd config ..."
 
 cat << EOF > $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
 <?xml version="1.0" encoding="UTF-8"?>
