@@ -72,7 +72,8 @@ cat << EOF > $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
     <key>StandardOutPath</key>
     <string>$BASE_DIR/log/warpbuild-agentd-launcher.out.log</string>
   </dict>
-</plist
+</plist>
+EOF
 
 echo "Adding agent to launchd ..."
 sudo mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist /Library/LaunchDaemons/com.warpbuild.warpbuild-agentd-launcher.plist
