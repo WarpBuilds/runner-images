@@ -1,8 +1,10 @@
-#!/bin/bash -e -o pipefail
+#!/bin/bash 
 ################################################################################
 ##  File:  install-agent.sh
 ##  Desc:  Installs and configures warpbuild agent
 ################################################################################
+
+set -e -o pipefail
 
 source ~/utils/utils.sh
 
@@ -33,7 +35,10 @@ cat << EOF > $BASE_DIR/warpbuild-agentd-launcher.sh
 /usr/local/bin/warpbuild-agentd --settings=$BASE_DIR/settings.json
 EOF
 
+echo "Setting launcher permissions ..."
 chmod +x $BASE_DIR/warpbuild-agentd-launcher.sh
+
+echo "Adding settings ..."
 mv $BASE_DIR/warpbuild-agentd-launcher.sh /usr/local/bin/warpbuild-agentd-launcher.sh
 
 echo "Adding launchd config ..."
