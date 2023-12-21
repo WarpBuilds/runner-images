@@ -49,7 +49,7 @@ cat << EOF > $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
     <integer>-10</integer>
     <key>ProgramArguments</key>
     <array>
-      <string>/usr/local/warpbuild-agentd-launcher.sh</string>
+      <string>/usr/local/bin/warpbuild-agentd-launcher.sh</string>
     </array>
     <key>EnvironmentVariables</key>
     <dict>
