@@ -86,7 +86,5 @@ echo "Setting agent permissions ..."
 sudo chown root:wheel /Library/LaunchDaemons/com.warpbuild.warpbuild-agentd-launcher.plist
 echo "Loading agent ..."
 sudo launchctl load /Library/LaunchDaemons/com.warpbuild.warpbuild-agentd-launcher.plist
-echo "Starting agent ..."
-sudo launchctl start com.warpbuild.warpbuild-agentd-launcher
 
 echo "Agent setup complete."
