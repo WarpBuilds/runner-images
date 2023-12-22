@@ -122,38 +122,41 @@ build {
   sources = ["source.tart-cli.tart"]
 
   provisioner "shell" {
-    inline = [
-      // Enable passwordless sudo
-      "echo ${var.vm_password} | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo '${var.vm_username} ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/${var.vm_username}-nopasswd\"",
-      // Enable auto-login
-      //
-      // See https://github.com/xfreebird/kcpassword for details.
-      "echo '00000000: 1ced 3f4a bcbc ba2c caca 4e82' | sudo xxd -r - /etc/kcpassword",
-      "sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser ${var.vm_username}",
-      // Disable screensaver at login screen
-      "sudo defaults write /Library/Preferences/com.apple.screensaver loginWindowIdleTime 0",
-      // Disable screensaver for admin user
-      "defaults -currentHost write com.apple.screensaver idleTime 0",
-      // Prevent the VM from sleeping
-      "sudo systemsetup -setdisplaysleep Off 2>/dev/null",
-      "sudo systemsetup -setsleep Off 2>/dev/null",
-      "sudo systemsetup -setcomputersleep Off 2>/dev/null",
-      // Launch Safari to populate the defaults
-      "/Applications/Safari.app/Contents/MacOS/Safari &",
-      "SAFARI_PID=$!",
-      "disown",
-      "sleep 30",
-      "kill -9 $SAFARI_PID",
-      // Enable Safari's remote automation and "Develop" menu
-      "sudo safaridriver --enable",
-      "defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true",
-      "defaults write com.apple.Safari IncludeDevelopMenu -bool true",
-      // Disable screen lock
-      //
-      // Note that this only works if the user is logged-in,
-      // i.e. not on login screen.
-      "sysadminctl -screenLock off -password ${var.vm_password}",
-      "defaults -currentHost write com.apple.screensaver idleTime 0"
+    scripts = [
+      "./scripts/prepare/setup-system.sh"
     ]
+    # inline = [
+    #   // Enable passwordless sudo
+    #   "echo ${var.vm_password} | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo '${var.vm_username} ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/${var.vm_username}-nopasswd\"",
+    #   // Enable auto-login
+    #   //
+    #   // See https://github.com/xfreebird/kcpassword for details.
+    #   "echo '00000000: 1ced 3f4a bcbc ba2c caca 4e82' | sudo xxd -r - /etc/kcpassword",
+    #   "sudo defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser ${var.vm_username}",
+    #   // Disable screensaver at login screen
+    #   "sudo defaults write /Library/Preferences/com.apple.screensaver loginWindowIdleTime 0",
+    #   // Disable screensaver for admin user
+    #   "defaults -currentHost write com.apple.screensaver idleTime 0",
+    #   // Prevent the VM from sleeping
+    #   "sudo systemsetup -setdisplaysleep Off 2>/dev/null",
+    #   "sudo systemsetup -setsleep Off 2>/dev/null",
+    #   "sudo systemsetup -setcomputersleep Off 2>/dev/null",
+    #   // Launch Safari to populate the defaults
+    #   "/Applications/Safari.app/Contents/MacOS/Safari &",
+    #   "SAFARI_PID=$!",
+    #   "disown",
+    #   "sleep 30",
+    #   "kill -9 $SAFARI_PID",
+    #   // Enable Safari's remote automation and "Develop" menu
+    #   "sudo safaridriver --enable",
+    #   "defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true",
+    #   "defaults write com.apple.Safari IncludeDevelopMenu -bool true",
+    #   // Disable screen lock
+    #   //
+    #   // Note that this only works if the user is logged-in,
+    #   // i.e. not on login screen.
+    #   "sysadminctl -screenLock off -password ${var.vm_password}",
+    #   "defaults -currentHost write com.apple.screensaver idleTime 0"
+    # ]
   }
 }
