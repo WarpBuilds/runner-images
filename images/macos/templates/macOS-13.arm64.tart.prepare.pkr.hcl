@@ -122,6 +122,9 @@ build {
   sources = ["source.tart-cli.tart"]
 
   provisioner "shell" {
+    environment_vars = [
+      "PASSWORD=${var.vm_password}"
+    ]
     scripts = [
       "./scripts/prepare/setup-system.sh"
     ]
