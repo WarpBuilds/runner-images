@@ -124,7 +124,7 @@ build {
   provisioner "shell" {
     inline = [
       // Enable passwordless sudo
-      "echo ${var.vm_username} | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo '${var.vm_username} ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/${var.vm_username}-nopasswd\"",
+      "echo ${var.vm_password} | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo '${var.vm_username} ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/${var.vm_username}-nopasswd\"",
       // Enable auto-login
       //
       // See https://github.com/xfreebird/kcpassword for details.
