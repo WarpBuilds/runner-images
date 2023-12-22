@@ -3,6 +3,7 @@
 set -e -o pipefail
 
 RUNNER_USER='runner'
+RUNNER_PASS=''
 
 
 echo "A user $RUNNER_USER will be created to run the agent."
@@ -19,7 +20,7 @@ echo "Creating new runner user through sysadminctl with admin privileges"
 sudo sysadminctl \
   -addUser $RUNNER_USER \
   -fullName $RUNNER_USER \
-  -password $RUNNER_USER \
+  -password $RUNNER_PASS \
   -home /Users/$RUNNER_USER \
   -admin
 
