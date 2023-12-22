@@ -36,7 +36,7 @@ dscl . list /Users | grep -v '^_'
 echo "Copying $curr_user home directory to $RUNNER_USER"
 sudo cp -R /Users/$curr_user/ /Users/$RUNNER_USER/
 echo "Changing ownership of $RUNNER_USER home directory to $RUNNER_USER"
-sudo chown -R $RUNNER_USER /Users/$RUNNER_USER
+sudo chown -R $RUNNER_USER:$curr_group /Users/$RUNNER_USER
 
 # Enable SSH (Remote Login)
 sudo systemsetup -setremotelogin on
