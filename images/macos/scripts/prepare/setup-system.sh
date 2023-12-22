@@ -1,7 +1,12 @@
 #!/bin/bash
-#
 
 set -e -o pipefail
+
+# check if password is set
+if [ -z "$PASSWORD" ]; then
+  echo "PASSWORD environment variable is not set"
+  exit 1
+fi
 
 # get current user
 USERNAME=$(id -un)
