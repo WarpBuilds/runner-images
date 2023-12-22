@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+
+set -e -o pipefail
 
 # get current user
 USERNAME=$(id -un)
