@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -o pipefail
+
 RUNNER_USER='runner'
 
 
@@ -26,6 +28,9 @@ sudo dscl . -create /Users/$RUNNER_USER PrimaryGroupID "$curr_group"
 
 echo "Adding $RUNNER_USER to sudoers"
 sudo dscl . -append /Groups/admin GroupMembership $RUNNER_USER
+
+echo "List all users"
+dscl . list /Users | grep -v '^_'
 
 echo "Copying $curr_user home directory to $RUNNER_USER"
 sudo cp -R /Users/$curr_user/ /Users/$RUNNER_USER/
