@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "Setting up system ..."
 set -e -o pipefail
 
 # check if password is set
@@ -10,6 +11,7 @@ fi
 
 # get current user
 USERNAME=$(id -un)
+echo "Current user is $USERNAME"
 
 echo "Enabling passwordless sudo for $USERNAME"
 # Enable passwordless sudo
