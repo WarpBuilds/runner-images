@@ -13,7 +13,7 @@ USERNAME=$(id -un)
 
 echo "Enabling passwordless sudo for $USERNAME"
 # Enable passwordless sudo
-echo $PASSWORD | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo '$USERNAME ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/$USERNAME-nopasswd\"
+echo "${PASSWORD}" | sudo -S sh -c \"mkdir -p /etc/sudoers.d/; echo '$USERNAME ALL=(ALL) NOPASSWD: ALL' | EDITOR=tee visudo /etc/sudoers.d/$USERNAME-nopasswd\"
 
 echo "Enabling auto-login for $USERNAME"
 # Enable auto-login
