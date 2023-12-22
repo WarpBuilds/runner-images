@@ -3,8 +3,24 @@
 set -e -o pipefail
 
 RUNNER_USER='runner'
-RUNNER_PASS=''
+RUNNER_PASS='runner'
 
+# Create a new user with the $RUNNER_USER 
+sudo dscl . -create /Users/$RUNNER_USER
+# Add the display name of the User as runner   
+sudo dscl . -create /Users/$RUNNER_USER RealName "runner"  
+# Replace $RUNNER_PASS with your desired password to set the password for this user  
+sudo dscl . -passwd /Users/$RUNNER_USER $RUNNER_PASS  
+# Set the Unique ID for the New user. Replace with a number that is not already taken.   
+sudo dscl . -create /Users/$RUNNER_USER UniqueID 502
+# Set the group ID for the user  
+sudo dscl . -create /Users/$RUNNER_USER PrimaryGroupID 20  
+# Set the shell interpreter to Bash for New\ user   
+sudo dscl . -create /Users/$RUNNER_USER UserShell /bin/bash  
+# Create a Home folder for the user  
+sudo dscl . -create /Users/$RUNNER_USER NFSHomeDirectory /Users/$RUNNER_USER  
+# Append the User with admin privilege. If this line is not included the user will be set as standard user. 
+sudo dscl . -append /Groups/admin GroupMembership $RUNNER_USER  
 
 echo "A user $RUNNER_USER will be created to run the agent."
 
@@ -16,22 +32,22 @@ echo "Getting current user"
 curr_user=$(id -un)
 echo "Current user: $curr_user"
 
-echo "Creating new runner user through sysadminctl with admin privileges"
-sudo sysadminctl \
-  -addUser $RUNNER_USER \
-  -fullName $RUNNER_USER \
-  -password $RUNNER_PASS \
-  -home /Users/$RUNNER_USER \
-  -admin
+# echo "Creating new runner user through sysadminctl with admin privileges"
+# sudo sysadminctl \
+#   -addUser $RUNNER_USER \
+#   -fullName $RUNNER_USER \
+#   -password $RUNNER_PASS \
+#   -home /Users/$RUNNER_USER \
+#   -admin
 
-echo "Adding $RUNNER_USER to $curr_group"
-sudo dscl . -create /Users/$RUNNER_USER PrimaryGroupID "$curr_group"
+# echo "Adding $RUNNER_USER to $curr_group"
+# sudo dscl . -create /Users/$RUNNER_USER PrimaryGroupID "$curr_group"
 
-echo "Adding $RUNNER_USER to sudoers"
-sudo dscl . -append /Groups/admin GroupMembership $RUNNER_USER
+# echo "Adding $RUNNER_USER to sudoers"
+# sudo dscl . -append /Groups/admin GroupMembership $RUNNER_USER
 
-echo "Validating user creation"
-id $RUNNER_USER
+# echo "Validating user creation"
+# id $RUNNER_USER
 
 echo "Copying $curr_user home directory to $RUNNER_USER"
 sudo cp -R /Users/$curr_user/ /Users/$RUNNER_USER/
