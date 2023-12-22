@@ -32,27 +32,13 @@ echo "Getting current user"
 curr_user=$(id -un)
 echo "Current user: $curr_user"
 
-# echo "Creating new runner user through sysadminctl with admin privileges"
-# sudo sysadminctl \
-#   -addUser $RUNNER_USER \
-#   -fullName $RUNNER_USER \
-#   -password $RUNNER_PASS \
-#   -home /Users/$RUNNER_USER \
-#   -admin
-
-# echo "Adding $RUNNER_USER to $curr_group"
-# sudo dscl . -create /Users/$RUNNER_USER PrimaryGroupID "$curr_group"
-
-# echo "Adding $RUNNER_USER to sudoers"
-# sudo dscl . -append /Groups/admin GroupMembership $RUNNER_USER
-
-# echo "Validating user creation"
-# id $RUNNER_USER
-
 echo "Copying $curr_user home directory to $RUNNER_USER"
 sudo cp -R /Users/$curr_user/ /Users/$RUNNER_USER/
 echo "Changing ownership of $RUNNER_USER home directory to $RUNNER_USER"
 sudo chown -R $RUNNER_USER:$curr_group /Users/$RUNNER_USER
+
+echo "Enabling passwordless sudo for $RUNNER_USER"
+echo "$RUNNER_USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$RUNNER_USER
 
 # Enable SSH (Remote Login)
 sudo systemsetup -setremotelogin on
