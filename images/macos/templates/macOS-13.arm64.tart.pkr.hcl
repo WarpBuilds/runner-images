@@ -17,13 +17,13 @@ variable "build_id" {
 
 variable "vm_username" {
   type = string
-  default = "admin"
+  default = "runner"
   sensitive = true
 }
 
 variable "vm_password" {
   type = string
-  default = "admin"
+  default = "runner"
   sensitive = true
 }
 
@@ -68,8 +68,8 @@ source "tart-cli" "tart" {
   memory_gb    = var.ram_size
   disk_size_gb = 200
   headless     = true
-  ssh_password = "admin"
-  ssh_username = "admin"
+  ssh_password = var.vm_password
+  ssh_username = var.vm_username
   ssh_timeout  = "120s"
 }
 

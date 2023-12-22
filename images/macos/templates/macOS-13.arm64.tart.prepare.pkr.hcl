@@ -13,19 +13,14 @@ variable "vm_name" {
 
 variable "vm_username" {
   type = string
-  default = "runner"
+  default = "admin"
   sensitive = true
 }
 
 variable "vm_password" {
   type = string
-  default = "runner"
+  default = "admin"
   sensitive = true
-}
-
-variable "github_api_pat" {
-  type = string
-  default = ""
 }
 
 variable "vcpu_count" {
@@ -58,12 +53,11 @@ build {
   sources = [
     "source.tart-cli.tart"
   ]
-
+  
   provisioner "shell" {
     scripts = [
-      "./scripts/warpbuild/install-agent.sh",
-      "./scripts/warpbuild/install-github-runner.sh"
+      "./scripts/prepare/setup-runner-user.sh",
     ]
   }
+
 }
- 
