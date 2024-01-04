@@ -81,10 +81,9 @@ cat << EOF > $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
 EOF
 
 echo "Adding agent to launchd ..."
-sudo mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist /Library/LaunchDaemons/com.warpbuild.warpbuild-agentd-launcher.plist
-echo "Setting agent permissions ..."
-sudo chown root:wheel /Library/LaunchDaemons/com.warpbuild.warpbuild-agentd-launcher.plist
+mkdir -p ~/Library/LaunchAgents
+mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist ~/Library/LaunchAgents/com.warpbuild.warpbuild-agentd-launcher.plist
 echo "Loading agent ..."
-sudo launchctl load /Library/LaunchDaemons/com.warpbuild.warpbuild-agentd-launcher.plist
+launchctl load ~/Library/LaunchAgents/com.warpbuild.warpbuild-agentd-launcher.plist
 
 echo "Agent setup complete."
