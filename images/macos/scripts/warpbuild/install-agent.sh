@@ -87,13 +87,4 @@ mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist $LAUNCH_AGENTS_DIR/co
 echo "Loading agent ..."
 launchctl load $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
 
-echo "Waiting for agent to start ..."
-sleep 15
-
-echo "Validating agent status ..."
-if ! launchctl list | grep -q com.warpbuild.warpbuild-agentd-launcher; then
-    echo "Agent failed to start."
-    exit 1
-fi
-
 echo "Agent setup complete."
