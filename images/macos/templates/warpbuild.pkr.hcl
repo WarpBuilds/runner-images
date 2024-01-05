@@ -66,17 +66,5 @@ build {
     ]
   }
 
-  provisioner "shell" {
-    execute_command   = "source $HOME/.bash_profile; sudo {{ .Vars }} {{ .Path }}"
-    expect_disconnect = true
-    inline            = ["echo 'Reboot VM'", "shutdown -r now"]
-  }
-  provisioner "shell" {
-    pause_before = "30s"
-    scripts = [
-      "./scripts/warpbuild/validate-agent.sh"
-    ]
-  }
-
 }
  
