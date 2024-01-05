@@ -81,9 +81,19 @@ cat << EOF > $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
 EOF
 
 echo "Adding agent to launchd ..."
-mkdir -p ~/Library/LaunchAgents
-mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist ~/Library/LaunchAgents/com.warpbuild.warpbuild-agentd-launcher.plist
+LAUNCH_AGENTS_DIR=~/Library/LaunchAgents
+mkdir -p $LAUNCH_AGENTS_DIR
+mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
 echo "Loading agent ..."
-launchctl load ~/Library/LaunchAgents/com.warpbuild.warpbuild-agentd-launcher.plist
+launchctl load $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
+
+echo "Waiting for agent to start ..."
+sleep 5
+
+echo "Validating agent status ..."
+if ! launchctl list | grep -q com.warpbuild.warpbuild-agentd-launcher; then
+    echo "Agent failed to start."
+    exit 1
+fi
 
 echo "Agent setup complete."
