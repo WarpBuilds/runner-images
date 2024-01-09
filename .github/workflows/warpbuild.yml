@@ -1,0 +1,52 @@
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: "Image name"
+        required: true
+        options:
+          - "macos-13-arm64"
+      tag:
+        description: "Image tag"
+        required: true
+        default: "v0.5.0"
+
+jobs:
+  macos-13-arm64:
+    if: github.event.inputs.image == 'macos-13-arm64'
+    runs-on: warp-ubuntu-latest-2x
+    env:
+      GITHUB_API_PAT: ${{ secrets.MACOS_GITHUB_API_PAT }}
+      XCODE_INSTALL_STORAGE_URL: ${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
+      PREPROD_AWS_ACCESS_KEY_ID: ${{ secrets.PREPROD_AWS_ACCESS_KEY_ID }}
+      PREPROD_AWS_SECRET_ACCESS_KEY: ${{ secrets.PREPROD_AWS_SECRET_ACCESS_KEY }}
+      PREPROD_AWS_REGION: us-east-2
+      PROD_AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+      PROD_AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+      PROD_AWS_REGION: us-east-2
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add preprod image URI on workflow dispatch
+        run: |
+          echo "PREPROD_IMAGE_URI=170982004044.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:${{ github.event.inputs.tag }}-macos-13-arm64-gh-warp" >> $GITHUB_ENV
+      - name: Add prod image URI on workflow dispatch
+        run: |
+          echo "PROD_IMAGE_URI=459740431552.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:${{ github.event.inputs.tag }}-macos-13-arm64-gh-warp" >> $GITHUB_ENV
+      - name: SSH into the macos machine
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.MACOS_HOST }}
+          username: ${{ secrets.MACOS_USER }}
+          password: ${{ secrets.MACOS_PASSWORD }}
+          allEnvs: true
+          script: |
+            if [ ! -d "runner-images" ]; then
+              # clone using the github token
+              git clone https://$GITHUB_TOKEN@github.com/${{ github.owner }}/${{ github.repository }}
+            fi
+            cd ${{ github.repository }}
+            git checkout ${{ github.ref }}
+            cd images/macos
+            make ci-pre-wb
+            make ci-wb
+            make ci-post-wb
