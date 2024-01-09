@@ -19,7 +19,6 @@ jobs:
     # if: github.event.inputs.image == 'macos-13-arm64'
     runs-on: warp-ubuntu-latest-2x
     env:
-      GITHUB_API_PAT: ${{ env.GITHUB_TOKEN }}
       XCODE_INSTALL_STORAGE_URL: ${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
       PREPROD_AWS_ACCESS_KEY_ID: ${{ secrets.PREPROD_AWS_ACCESS_KEY_ID }}
       PREPROD_AWS_SECRET_ACCESS_KEY: ${{ secrets.PREPROD_AWS_SECRET_ACCESS_KEY }}
@@ -29,6 +28,9 @@ jobs:
       PROD_AWS_REGION: us-east-2
     steps:
       - uses: actions/checkout@v2
+      - name: Set GITHUB_API_PAT
+        run: |
+          echo "GITHUB_API_PAT=$GITHUB_TOKEN" >> $GITHUB_ENV
       - name: Figure out image tag
         run: |
           IMAGE_TAG=${{ github.event.inputs.tag }}
