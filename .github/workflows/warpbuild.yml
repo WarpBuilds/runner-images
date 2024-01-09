@@ -1,4 +1,7 @@
 on:
+  push:
+    branches:
+      - feat/macos-tart
   workflow_dispatch:
     inputs:
       image:
@@ -13,10 +16,10 @@ on:
 
 jobs:
   macos-13-arm64:
-    if: github.event.inputs.image == 'macos-13-arm64'
+    # if: github.event.inputs.image == 'macos-13-arm64'
     runs-on: warp-ubuntu-latest-2x
     env:
-      GITHUB_API_PAT: ${{ secrets.MACOS_GITHUB_API_PAT }}
+      GITHUB_API_PAT: ${{ env.GITHUB_TOKEN }}
       XCODE_INSTALL_STORAGE_URL: ${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
       PREPROD_AWS_ACCESS_KEY_ID: ${{ secrets.PREPROD_AWS_ACCESS_KEY_ID }}
       PREPROD_AWS_SECRET_ACCESS_KEY: ${{ secrets.PREPROD_AWS_SECRET_ACCESS_KEY }}
@@ -26,14 +29,21 @@ jobs:
       PROD_AWS_REGION: us-east-2
     steps:
       - uses: actions/checkout@v2
+      - name: Figure out image tag
+        run: |
+          IMAGE_TAG=${{ github.event.inputs.tag }}
+          if [ "$IMAGE_TAG" == "" ]; then
+            IMAGE_TAG=v0.5.0
+          fi
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
       - name: Add preprod image URI on workflow dispatch
         run: |
-          echo "PREPROD_IMAGE_URI=170982004044.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:${{ github.event.inputs.tag }}-macos-13-arm64-gh-warp" >> $GITHUB_ENV
+          echo "PREPROD_IMAGE_URI=170982004044.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp" >> $GITHUB_ENV
       - name: Add prod image URI on workflow dispatch
         run: |
-          echo "PROD_IMAGE_URI=459740431552.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:${{ github.event.inputs.tag }}-macos-13-arm64-gh-warp" >> $GITHUB_ENV
-      - name: SSH into the macos machine
-        uses: appleboy/ssh-action@master
+          echo "PROD_IMAGE_URI=459740431552.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp" >> $GITHUB_ENV
+      - name: SSH into the macos machine and run the image build process
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.MACOS_HOST }}
           username: ${{ secrets.MACOS_USER }}
