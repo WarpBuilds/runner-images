@@ -71,25 +71,59 @@ jobs:
       - name: Just hello world from remote
         run: |
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'echo "Hello world from remote"'
-      # - name: Enable ssh-rsa on system
-      #   run: |
-      #     # sudo bash -c 'echo "CASignatureAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config'
-      #     echo "CASignatureAlgorithms +ssh-rsa" >> ~/.ssh/config
-      # - name: SSH into the macos machine and run the image build process
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.MACOS_HOST }}
-      #     username: ${{ secrets.MACOS_USERNAME }}
-      #     key: ${{ secrets.MACOS_KEY }}
-      #     allEnvs: true
-      #     script: |
-      #       if [ ! -d "runner-images" ]; then
-      #         # clone using the github token
-      #         git clone https://$GITHUB_TOKEN@github.com/${{ github.owner }}/${{ github.repository }}
-      #       fi
-      #       cd ${{ github.repository }}
-      #       git checkout ${{ github.ref }}
-      #       cd images/macos
-      #       make ci-pre-wb
-      #       make ci-wb
-      #       make ci-post-wb
+      - name: Save script to a file
+        run: |
+          cat <<EOF > wb-mac-image-build.sh
+          #!/bin/bash
+          set -e
+
+          # configure git with the github token
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+
+          git clone https://github.com/${{ github.owner }}/${{ github.repository }} repo
+          cd repo
+          git checkout ${{ github.ref }}
+
+          cd images/macos
+          make ci-pre-wb
+          make ci-wb
+          make ci-post-wb
+          EOF
+      - name: Run script on remote
+        run: |
+          cat wb-mac-image-build.sh
+          scp -o StrictHostKeyChecking=no wb-mac-image-build.sh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }}:~/wb-mac-image-build.sh
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'chmod +x ~/wb-mac-image-build.sh'
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} '~/wb-mac-image-build.sh'
+
+      #     if [ ! -d "runner-images" ]; then
+      #       # clone using the github token
+      #       git clone
+      #       https://$G
+
+      # # - name: Enable ssh-rsa on system
+      # #   run: |
+      # #     # sudo bash -c 'echo "CASignatureAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config'
+      # #     echo "CASignatureAlgorithms +ssh-rsa" >> ~/.ssh/config
+      # # - name: SSH into the macos machine and run the image build process
+      # #   uses: appleboy/ssh-action@v1.0.3
+      # #   with:
+      # #     host: ${{ secrets.MACOS_HOST }}
+      # #     username: ${{ secrets.MACOS_USERNAME }}
+      # #     key: ${{ secrets.MACOS_KEY }}
+      # #     allEnvs: true
+      # #     script: |
+      # #       if [ ! -d "runner-images" ]; then
+      # #         # clone using the github token
+      # #         git clone https://$GITHUB_TOKEN@github.com/${{ github.owner }}/${{ github.repository }}
+      # #       fi
+      # #       cd ${{ github.repository }}
+      # #       git checkout ${{ github.ref }}
+      # #       cd images/macos
+      # #       make ci-pre-wb
+      # #       make ci-wb
+      # #       make ci-post-wb
