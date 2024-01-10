@@ -96,6 +96,19 @@ jobs:
           echo "Checking out to current commit"
           git checkout ${{ github.sha }}
 
+          echo "Setting variables"
+          export XCODE_INSTALL_STORAGE_URL=${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
+          export PREPROD_AWS_ACCESS_KEY_ID=${{ secrets.PREPROD_AWS_ACCESS_KEY_ID }}
+          export PREPROD_AWS_SECRET_ACCESS_KEY=${{ secrets.PREPROD_AWS_SECRET_ACCESS_KEY }}
+          export PREPROD_AWS_REGION=us-east-2
+          export PROD_AWS_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          export PROD_AWS_SECRET_ACCESS_KEY=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          export PROD_AWS_REGION=us-east-2
+          export IMAGE_TAG=$IMAGE_TAG
+          export PREPROD_IMAGE_URI=170982004044.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp
+          export PROD_IMAGE_URI=459740431552.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp
+          export GITHUB_API_PAT=$GITHUB_TOKEN
+
           echo "Current path variable: $PATH"
 
           cd images/macos
@@ -109,6 +122,7 @@ jobs:
           scp -o StrictHostKeyChecking=no wb-mac-image-build.sh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }}:~/wb-mac-image-build.sh
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'chmod +x ~/wb-mac-image-build.sh'
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'bash -c ~/wb-mac-image-build.sh'
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'rm ~/wb-mac-image-build.sh'
 
       #     if [ ! -d "runner-images" ]; then
       #       # clone using the github token
