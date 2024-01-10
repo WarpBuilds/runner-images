@@ -144,6 +144,8 @@ jobs:
                   <string>/bin/bash</string>
                   <string>/Users/${{ secrets.MACOS_USERNAME }}/wb-mac-image-build.sh</string>
               </array>
+              <key>WorkingDirectory</key>
+              <string>/Users/${{ secrets.MACOS_USERNAME }}</string>
               <key>RunAtLoad</key>
               <true/>
               <key>StandardErrorPath</key>
