@@ -93,8 +93,8 @@ jobs:
           echo "Listing all available branches"
           git branch -v -a
           BRANCH=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///g')
-          echo "Checking out branch $BRANCH"
-          git checkout $BRANCH
+          echo "Checking out to current commit"
+          git checkout ${{ github.sha }}
 
           cd images/macos
           make ci-pre-wb
