@@ -50,8 +50,7 @@ jobs:
           ssh-keyscan -H '${{ secrets.MACOS_HOST }}' >> ~/.ssh/known_hosts
       - name: Enable ssh-rsa on system
         run: |
-          sudo su
-          echo "CASignatureAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config
+          sudo bash -c 'echo "CASignatureAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config'
       - name: SSH into the macos machine and run the image build process
         uses: appleboy/ssh-action@v1.0.3
         with:
