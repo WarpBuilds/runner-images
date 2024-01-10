@@ -108,7 +108,7 @@ jobs:
           cat wb-mac-image-build.sh
           scp -o StrictHostKeyChecking=no wb-mac-image-build.sh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }}:~/wb-mac-image-build.sh
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'chmod +x ~/wb-mac-image-build.sh'
-          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} '~/wb-mac-image-build.sh'
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'bash -c ~/wb-mac-image-build.sh'
 
       #     if [ ! -d "runner-images" ]; then
       #       # clone using the github token
