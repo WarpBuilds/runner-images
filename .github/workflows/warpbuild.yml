@@ -44,6 +44,13 @@ jobs:
       - name: Add prod image URI on workflow dispatch
         run: |
           echo "PROD_IMAGE_URI=459740431552.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp" >> $GITHUB_ENV
+      - name: Add key to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H '${{ secrets.MACOS_HOST }}' >> ~/.ssh/known_hosts
+      - name: Enable ssh-rsa on system
+        run: |
+          echo "CASignatureAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config
       - name: SSH into the macos machine and run the image build process
         uses: appleboy/ssh-action@v1.0.3
         with:
