@@ -12,7 +12,7 @@ on:
       tag:
         description: "Image tag"
         required: true
-        default: "v0.5.0"
+        default: "v0.1.0"
 
 jobs:
   macos-13-arm64:
@@ -110,6 +110,9 @@ jobs:
           export GITHUB_API_PAT=$GITHUB_TOKEN
 
           echo "Current path variable: $PATH"
+            
+          export PACKER_LOG=1
+          export PACKER_LOG_PATH=~/packer.log
 
           cd images/macos
           make ci-pre-wb
