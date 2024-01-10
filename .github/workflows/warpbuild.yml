@@ -86,7 +86,9 @@ jobs:
 
           git clone https://github.com/${{ github.owner }}/${{ github.repository }} repo
           cd repo
-          git checkout ${{ github.ref }}
+          echo "Fetching all branches"
+          git fetch --all
+          git checkout origin/${{ github.ref }}
 
           cd images/macos
           make ci-pre-wb
