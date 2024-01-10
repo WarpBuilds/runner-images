@@ -96,6 +96,8 @@ jobs:
           echo "Checking out to current commit"
           git checkout ${{ github.sha }}
 
+          echo "Current path variable: $PATH"
+
           cd images/macos
           make ci-pre-wb
           make ci-wb
