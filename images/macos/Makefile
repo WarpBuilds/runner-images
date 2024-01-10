@@ -9,13 +9,9 @@ wb:
 ci-pre-wb:
 	packer build \
 		-var-file ./variables/macos-13.arm64.tart.pkrvars.hcl \
-		-var "github_api_pat=${GITHUB_API_PAT}" \
-		-var "xcode_install_storage_url=${XCODE_INSTALL_STORAGE_URL}" \
 		templates/macOS-13.arm64.tart.prepare.pkr.hcl
 	packer build \
 		-var-file ./variables/macos-13.arm64.tart.pkrvars.hcl \
-		-var "github_api_pat=${GITHUB_API_PAT}" \
-		-var "xcode_install_storage_url=${XCODE_INSTALL_STORAGE_URL}" \
 		templates/macOS-13.arm64.tart.disable-sip.pkr.hcl
 	packer build \
 		-var-file ./variables/macos-13.arm64.tart.pkrvars.hcl \
@@ -26,8 +22,6 @@ ci-pre-wb:
 ci-wb:
 	packer build \
 		-var-file ./variables/macos-13.arm64.tart.pkrvars.hcl \
-		-var "github_api_pat=${GITHUB_API_PAT}" \
-		-var "xcode_install_storage_url=${XCODE_INSTALL_STORAGE_URL}" \
 		templates/warpbuild.pkr.hcl
 
 ci-post-wb:
