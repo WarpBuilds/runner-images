@@ -90,7 +90,10 @@ jobs:
           cd repo
           echo "Fetching all branches"
           git fetch --all
-          git checkout origin/${{ github.ref }}
+          echo "Listing all available branches"
+          git branch -v -a
+          echo "Checking out branch ${{ github.ref }}"
+          git checkout ${{ github.ref }}
 
           cd images/macos
           make ci-pre-wb
