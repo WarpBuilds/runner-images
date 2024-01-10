@@ -49,7 +49,7 @@ jobs:
         with:
           host: ${{ secrets.MACOS_HOST }}
           username: ${{ secrets.MACOS_USER }}
-          password: ${{ secrets.MACOS_PASSWORD }}
+          key: ${{ secrets.MACOS_KEY }}
           allEnvs: true
           script: |
             if [ ! -d "runner-images" ]; then
