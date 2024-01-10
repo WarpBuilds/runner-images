@@ -45,27 +45,36 @@ jobs:
         run: |
           echo "PROD_IMAGE_URI=459740431552.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp" >> $GITHUB_ENV
       - name: Add key to known_hosts
+        env:
+          MACOS_KEY: |
+            ${{ secrets.MACOS_KEY }}
         run: |
           mkdir -p ~/.ssh
+          echo "$MACOS_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H '${{ secrets.MACOS_HOST }}' >> ~/.ssh/known_hosts
-      - name: Enable ssh-rsa on system
+      - name: Just hello world from remote
         run: |
-          sudo bash -c 'echo "CASignatureAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config'
-      - name: SSH into the macos machine and run the image build process
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.MACOS_HOST }}
-          username: ${{ secrets.MACOS_USER }}
-          key: ${{ secrets.MACOS_KEY }}
-          allEnvs: true
-          script: |
-            if [ ! -d "runner-images" ]; then
-              # clone using the github token
-              git clone https://$GITHUB_TOKEN@github.com/${{ github.owner }}/${{ github.repository }}
-            fi
-            cd ${{ github.repository }}
-            git checkout ${{ github.ref }}
-            cd images/macos
-            make ci-pre-wb
-            make ci-wb
-            make ci-post-wb
+          ssh ${{ secrets.MACOS_USER }}@${{ secrets.MACOS_HOST }} 'echo "Hello world from remote"'
+      # - name: Enable ssh-rsa on system
+      #   run: |
+      #     # sudo bash -c 'echo "CASignatureAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config'
+      #     echo "CASignatureAlgorithms +ssh-rsa" >> ~/.ssh/config
+      # - name: SSH into the macos machine and run the image build process
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.MACOS_HOST }}
+      #     username: ${{ secrets.MACOS_USER }}
+      #     key: ${{ secrets.MACOS_KEY }}
+      #     allEnvs: true
+      #     script: |
+      #       if [ ! -d "runner-images" ]; then
+      #         # clone using the github token
+      #         git clone https://$GITHUB_TOKEN@github.com/${{ github.owner }}/${{ github.repository }}
+      #       fi
+      #       cd ${{ github.repository }}
+      #       git checkout ${{ github.ref }}
+      #       cd images/macos
+      #       make ci-pre-wb
+      #       make ci-wb
+      #       make ci-post-wb
