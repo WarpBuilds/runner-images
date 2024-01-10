@@ -92,8 +92,9 @@ jobs:
           git fetch --all
           echo "Listing all available branches"
           git branch -v -a
-          echo "Checking out branch ${{ github.ref }}"
-          git checkout ${{ github.ref }}
+          BRANCH=$(echo ${{ github.ref }} | sed 's/refs\/heads\///g')
+          echo "Checking out branch $BRANCH"
+          git checkout $BRANCH
 
           cd images/macos
           make ci-pre-wb
