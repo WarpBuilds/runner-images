@@ -92,7 +92,7 @@ jobs:
           git fetch --all
           echo "Listing all available branches"
           git branch -v -a
-          BRANCH=$(echo ${{ github.ref }} | sed 's/refs\/heads\///g')
+          BRANCH=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///g')
           echo "Checking out branch $BRANCH"
           git checkout $BRANCH
 
