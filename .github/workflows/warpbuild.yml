@@ -53,6 +53,21 @@ jobs:
           echo "$MACOS_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H '${{ secrets.MACOS_HOST }}' >> ~/.ssh/known_hosts
+      - name: Validate that inputs are present
+        run: |
+          if [ -z "${{ secrets.MACOS_USER }}" ]; then
+            echo "MACOS_USER is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.MACOS_HOST }}" ]; then
+            echo "MACOS_HOST is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.MACOS_KEY }}" ]; then
+            echo "MACOS_KEY is not set"
+            exit 1
+          fi
+
       - name: Just hello world from remote
         run: |
           ssh ${{ secrets.MACOS_USER }}@${{ secrets.MACOS_HOST }} 'echo "Hello world from remote"'
