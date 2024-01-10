@@ -84,6 +84,8 @@ jobs:
           git config --global credential.helper store
           echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
 
+          echo "Deleting repo if it exists"
+          rm -rf repo
           git clone https://github.com/${{ github.owner }}/${{ github.repository }} repo
           cd repo
           echo "Fetching all branches"
