@@ -77,6 +77,8 @@ jobs:
           #!/bin/bash
           set -e
 
+          rm -rf ~/wb-mac-image-build.done || true
+
           # configure git with the github token
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
@@ -118,14 +120,61 @@ jobs:
           make ci-pre-wb
           make ci-wb
           make ci-post-wb
+
+          touch ~/wb-mac-image-build.done
           EOF
-      - name: Run script on remote
+
+      - name: Move script to remote
         run: |
           cat wb-mac-image-build.sh
           scp -o StrictHostKeyChecking=no wb-mac-image-build.sh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }}:~/wb-mac-image-build.sh
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'chmod +x ~/wb-mac-image-build.sh'
-          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'bash -c ~/wb-mac-image-build.sh'
-          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'rm ~/wb-mac-image-build.sh'
+
+      - name: Create Launch Agent Plist
+        run: |
+          cat <<EOF > com.github.macos.imagebuilder.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>Label</key>
+              <string>com.github.macos.imagebuilder</string>
+              <key>ProgramArguments</key>
+              <array>
+                  <string>/bin/bash</string>
+                  <string>/Users/${{ secrets.MACOS_USERNAME }}/wb-mac-image-build.sh</string>
+              </array>
+              <key>RunAtLoad</key>
+              <true/>
+              <key>StandardErrorPath</key>
+              <string>/Users/${{ secrets.MACOS_USERNAME }}/imagebuilder-stderr.log</string>
+              <key>StandardOutPath</key>
+              <string>/Users/${{ secrets.MACOS_USERNAME }}/imagebuilder-stdout.log</string>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Transfer and Load Launch Agent
+        run: |
+          scp -o StrictHostKeyChecking=no com.github.macos.imagebuilder.plist ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }}:~/Library/LaunchAgents/
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'launchctl load -w ~/Library/LaunchAgents/com.github.macos.imagebuilder.plist'
+
+      - name: Monitor
+        run: |
+          # Start tailing the log file
+          ssh -f ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'tail -f ~/packer.log' &
+
+          # Poll for the completion flag file
+          while true; do
+            if ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'test -f ~/wb-mac-image-build.done'; then
+              echo "Script has completed"
+              break
+            fi
+            sleep 5 # adjust the sleep duration as appropriate
+          done
+
+          # Kill the tail process
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'pkill -f "tail -f ~/packer.log"'
 
       #     if [ ! -d "runner-images" ]; then
       #       # clone using the github token
