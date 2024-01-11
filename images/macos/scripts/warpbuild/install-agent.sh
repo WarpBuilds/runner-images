@@ -85,6 +85,6 @@ LAUNCH_AGENTS_DIR=~/Library/LaunchAgents
 mkdir -p $LAUNCH_AGENTS_DIR
 mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
 echo "Loading agent ..."
-launchctl load $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
+launchctl load -w $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist || true
 
 echo "Agent setup complete."
