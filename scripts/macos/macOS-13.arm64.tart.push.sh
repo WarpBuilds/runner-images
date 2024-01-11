@@ -45,28 +45,28 @@ if [ -z "${PROD_AWS_REGION}" ]; then
   exit 1
 fi
 
-echo "Logging into ECR for preprod"
-AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
+echo "Logging into ECR for preprod with host $PREPROD_IMAGE_HOST"
+login_pass=$(AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
   AWS_SECRET_ACCESS_KEY=${PREPROD_AWS_SECRET_ACCESS_KEY} \
   AWS_REGION=${PREPROD_AWS_REGION} \
-  aws ecr get-login-password | \
-  IMAGE_HOST=${PREPROD_IMAGE_HOST} \
-  tart login --username AWS --password-stdin ${IMAGE_HOST}
+  aws ecr get-login-password)
 
-echo "Pushing image to preprod"
-IMAGE_URL=${PREPROD_IMAGE_HOST} \
- tart push s2 ${IMAGE_URL}
+echo $login_pass | \
+  tart login --username AWS --password-stdin $PREPROD_IMAGE_HOST
+
+echo "Pushing image to preprod to $PREPROD_IMAGE_URL"
+tart push s2 $PREPROD_IMAGE_URL
 echo "Pushed image to preprod"
 
-echo "Logging into ECR for prod"
-AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \
+echo "Logging into ECR for prod with host $PROD_IMAGE_HOST"
+login_pass=$(AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \
   AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY} \
   AWS_REGION=${PROD_AWS_REGION} \
-  aws ecr get-login-password | \
-  IMAGE_HOST=${PROD_IMAGE_HOST} \
-  tart login --username AWS --password-stdin ${IMAGE_HOST}
+  aws ecr get-login-password)
 
-echo "Pushing image to prod"
-IMAGE_URL=${PROD_IMAGE_HOST} \
-  tart push s2 ${IMAGE_URL}
+echo $login_pass | \
+  tart login --username AWS --password-stdin $PROD_IMAGE_HOST
+
+echo "Pushing image to prod to $PROD_IMAGE_URL"
+tart push s2 $PROD_IMAGE_URL
 echo "Pushed image to prod"
