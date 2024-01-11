@@ -16,7 +16,11 @@ on:
 
 jobs:
   macos-13-arm64:
-    # if: github.event.inputs.image == 'macos-13-arm64'
+    # define this job as a concurrency group
+    # we want to build only one image at a time since the mac machine is a shared resource
+    concurrency:
+      group: macos-ssh
+    if: github.event.inputs.image == 'macos-13-arm64'
     runs-on: warp-ubuntu-latest-x64-2x
     env:
       XCODE_INSTALL_STORAGE_URL: ${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
@@ -77,11 +81,25 @@ jobs:
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'echo "Hello world from remote"'
       - name: Save script to a file
         run: |
-          cat <<EOF > wb-mac-image-build.sh
+          cat << EOF > wb-mac-image-build.wrapper.sh
           #!/bin/bash
           set -e
 
           rm -rf ~/wb-mac-image-build.done || true
+          ./wb-mac-image-build.sh
+          if [ $? -ne 0 ]; then
+            echo "wb-mac-image-build.sh failed"
+            touch ~/wb-mac-image-build.failed
+            exit 1
+          fi
+
+          touch ~/wb-mac-image-build.done
+          EOF
+
+
+          cat <<EOF > wb-mac-image-build.sh
+          #!/bin/bash
+          set -e
 
           # configure git with the github token
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
@@ -123,7 +141,6 @@ jobs:
           make ci-wb
           make ci-post-wb
 
-          touch ~/wb-mac-image-build.done
           EOF
 
       - name: Move script to remote
@@ -145,7 +162,7 @@ jobs:
               <array>
                   <string>/bin/bash</string>
                   <string>-c</string>
-                  <string>. /Users/${{ secrets.MACOS_USERNAME }}/.bashrc; /Users/${{ secrets.MACOS_USERNAME }}/wb-mac-image-build.sh</string>
+                  <string>. /Users/${{ secrets.MACOS_USERNAME }}/.bashrc; /Users/${{ secrets.MACOS_USERNAME }}/wb-mac-image-build.wrapper.sh</string>
               </array>
               <key>WorkingDirectory</key>
               <string>/Users/${{ secrets.MACOS_USERNAME }}</string>
@@ -182,8 +199,14 @@ jobs:
 
           # Poll for the completion flag file
           while true; do
+            # completed successfully
             if ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'test -f ~/wb-mac-image-build.done'; then
               echo "Script has completed"
+              break
+            fi
+            # failed
+            if ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'test -f ~/wb-mac-image-build.failed'; then
+              echo "Script has failed"
               break
             fi
             sleep 5 # adjust the sleep duration as appropriate
@@ -194,30 +217,7 @@ jobs:
           # Kill the tail process for the err log file
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'pkill -f "tail -f ~/imagebuilder-stderr.log"'
 
-      #     if [ ! -d "runner-images" ]; then
-      #       # clone using the github token
-      #       git clone
-      #       https://$G
-
-      # # - name: Enable ssh-rsa on system
-      # #   run: |
-      # #     # sudo bash -c 'echo "CASignatureAlgorithms +ssh-rsa" >> /etc/ssh/ssh_config'
-      # #     echo "CASignatureAlgorithms +ssh-rsa" >> ~/.ssh/config
-      # # - name: SSH into the macos machine and run the image build process
-      # #   uses: appleboy/ssh-action@v1.0.3
-      # #   with:
-      # #     host: ${{ secrets.MACOS_HOST }}
-      # #     username: ${{ secrets.MACOS_USERNAME }}
-      # #     key: ${{ secrets.MACOS_KEY }}
-      # #     allEnvs: true
-      # #     script: |
-      # #       if [ ! -d "runner-images" ]; then
-      # #         # clone using the github token
-      # #         git clone https://$GITHUB_TOKEN@github.com/${{ github.owner }}/${{ github.repository }}
-      # #       fi
-      # #       cd ${{ github.repository }}
-      # #       git checkout ${{ github.ref }}
-      # #       cd images/macos
-      # #       make ci-pre-wb
-      # #       make ci-wb
-      # #       make ci-post-wb
+          # if the script failed, exit with an error
+          if ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'test -f ~/wb-mac-image-build.failed'; then
+            exit 1
+          fi
