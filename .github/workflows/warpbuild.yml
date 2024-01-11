@@ -83,7 +83,6 @@ jobs:
         run: |
           cat << EOF > wb-mac-image-build.wrapper.sh
           #!/bin/bash
-          set -e
 
           rm -rf ~/wb-mac-image-build.done || true
           rm -rf ~/wb-mac-image-build.failed || true
