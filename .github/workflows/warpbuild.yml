@@ -21,7 +21,7 @@ jobs:
     concurrency:
       group: macos-ssh
     # if: github.event.inputs.image == 'macos-13-arm64'
-    runs-on: ubuntu-latest
+    runs-on: warp-ubuntu-latest-x64-2x
     env:
       XCODE_INSTALL_STORAGE_URL: ${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
       PREPROD_AWS_ACCESS_KEY_ID: ${{ secrets.PREPROD_AWS_ACCESS_KEY_ID }}
