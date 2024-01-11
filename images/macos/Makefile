@@ -31,6 +31,7 @@ ci-post-wb:
 	aws ecr get-login-password | \
 	IMAGE_URL=${PREPROD_IMAGE_URL} \
 	tart login --username AWS --password-stdin ${IMAGE_URL}
+	tart push s2 ${IMAGE_URL}
 
 	AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \
 	AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY} \
@@ -38,3 +39,4 @@ ci-post-wb:
 	aws ecr get-login-password | \
 	IMAGE_URL=${PROD_IMAGE_URL} \
 	tart login --username AWS --password-stdin ${IMAGE_URL}
+	tart push s2 ${IMAGE_URL}
