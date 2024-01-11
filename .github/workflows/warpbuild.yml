@@ -29,9 +29,6 @@ jobs:
       DEFAULT_IMAGE_TAG: v0.6.0
     steps:
       - uses: actions/checkout@v2
-      - name: Set GITHUB_API_PAT
-        run: |
-          echo "GITHUB_API_PAT=$GITHUB_TOKEN" >> $GITHUB_ENV
       - name: Figure out image tag
         run: |
           IMAGE_TAG=${{ github.event.inputs.tag }}
@@ -117,7 +114,7 @@ jobs:
           export PREPROD_IMAGE_URI=${{ env.PREPROD_IMAGE_URI }}
           export PROD_IMAGE_HOST=${{ env.PROD_IMAGE_HOST }}
           export PROD_IMAGE_URI=${{ env.PROD_IMAGE_URI }}
-          export GITHUB_API_PAT=${{ env.GITHUB_TOKEN }}
+          export GITHUB_API_PAT=${{ secrets.GITHUB_TOKEN }}
 
           echo "Current path variable: $PATH"
             
