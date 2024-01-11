@@ -143,11 +143,13 @@ jobs:
 
           EOF
 
-      - name: Move script to remote
+      - name: Move scripts to remote
         run: |
           cat wb-mac-image-build.sh
           scp -o StrictHostKeyChecking=no wb-mac-image-build.sh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }}:~/wb-mac-image-build.sh
+          scp -o StrictHostKeyChecking=no wb-mac-image-build.wrapper.sh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }}:~/wb-mac-image-build.wrapper.sh
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'chmod +x ~/wb-mac-image-build.sh'
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'chmod +x ~/wb-mac-image-build.wrapper.sh'
 
       - name: Create Launch Agent Plist
         run: |
