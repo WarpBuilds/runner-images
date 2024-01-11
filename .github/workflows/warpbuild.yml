@@ -199,11 +199,6 @@ jobs:
         run: |
           echo "Some log lines will be missed. To get the complete logs vnc into the mac machine"
 
-          # Start tailing the out log file
-          ssh -f ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'tail -f ~/imagebuilder-stdout.log' &
-          # Start tailing the err log file
-          ssh -f ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'tail -f ~/imagebuilder-stderr.log' &
-
           # Poll for the completion flag file
           while true; do
             # completed successfully
@@ -214,15 +209,16 @@ jobs:
             # failed
             if ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'test -f ~/wb-mac-image-build.failed'; then
               echo "Script has failed"
+              echo "Log file:"
+              # log the error file
+              ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'cat ~/imagebuilder-stderr.log'
               break
             fi
-            sleep 5 # adjust the sleep duration as appropriate
+            # log the last 50 lines of the out log file
+            echo "Logging last 50 lines of the stdout log file"
+            ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'tail -n 50 ~/imagebuilder-stdout.log'
+            sleep 30
           done
-
-          # Kill the tail process for the out log file
-          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'pkill -f "tail -f ~/imagebuilder-stdout.log"'
-          # Kill the tail process for the err log file
-          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'pkill -f "tail -f ~/imagebuilder-stderr.log"'
 
           # if the script failed, exit with an error
           if ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'test -f ~/wb-mac-image-build.failed'; then
