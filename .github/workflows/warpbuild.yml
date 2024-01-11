@@ -20,7 +20,7 @@ jobs:
     # we want to build only one image at a time since the mac machine is a shared resource
     concurrency:
       group: macos-ssh
-    if: github.event.inputs.image == 'macos-13-arm64'
+    # if: github.event.inputs.image == 'macos-13-arm64'
     runs-on: warp-ubuntu-latest-x64-2x
     env:
       XCODE_INSTALL_STORAGE_URL: ${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
