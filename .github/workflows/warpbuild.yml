@@ -26,6 +26,7 @@ jobs:
       PROD_AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
       PROD_AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
       PROD_AWS_REGION: us-east-2
+      DEFAULT_IMAGE_TAG: v0.6.0
     steps:
       - uses: actions/checkout@v2
       - name: Set GITHUB_API_PAT
@@ -35,7 +36,7 @@ jobs:
         run: |
           IMAGE_TAG=${{ github.event.inputs.tag }}
           if [ "$IMAGE_TAG" == "" ]; then
-            IMAGE_TAG=v0.5.0
+            IMAGE_TAG=${{ env.DEFAULT_IMAGE_TAG }}
           fi
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
       - name: Add preprod image URI on workflow dispatch
@@ -122,7 +123,7 @@ jobs:
             
           export PACKER_LOG=1
 
-          # make ci-wb
+          make ci-wb
           make ci-post-wb
 
           touch ~/wb-mac-image-build.done
