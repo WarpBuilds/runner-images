@@ -79,9 +79,11 @@ jobs:
 
           rm -rf ~/wb-mac-image-build.done || true
           # cleanup log files
-          rm -rf ~/packer.log || true
           rm -rf ~/imagebuilder-stderr.log || true
           rm -rf ~/imagebuilder-stdout.log || true
+          # recreate log files
+          touch ~/imagebuilder-stderr.log || true
+          touch ~/imagebuilder-stdout.log || true
 
           # configure git with the github token
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
@@ -118,7 +120,6 @@ jobs:
           echo "Current path variable: $PATH"
             
           export PACKER_LOG=1
-          export PACKER_LOG_PATH=~/packer.log
 
           cd images/macos
           # make ci-pre-wb
@@ -175,8 +176,10 @@ jobs:
         run: |
           echo "Some log lines will be missed. To get the complete logs vnc into the mac machine"
 
-          # Start tailing the log file
-          ssh -f ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'tail -f ~/packer.log' &
+          # Start tailing the out log file
+          ssh -f ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'tail -f ~/imagebuilder-stdout.log' &
+          # Start tailing the err log file
+          ssh -f ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'tail -f ~/imagebuilder-stderr.log' &
 
           # Poll for the completion flag file
           while true; do
@@ -187,8 +190,10 @@ jobs:
             sleep 5 # adjust the sleep duration as appropriate
           done
 
-          # Kill the tail process
-          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'pkill -f "tail -f ~/packer.log"'
+          # Kill the tail process for the out log file
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'pkill -f "tail -f ~/imagebuilder-stdout.log"'
+          # Kill the tail process for the err log file
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'pkill -f "tail -f ~/imagebuilder-stderr.log"'
 
       #     if [ ! -d "runner-images" ]; then
       #       # clone using the github token
