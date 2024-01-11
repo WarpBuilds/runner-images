@@ -40,12 +40,14 @@ jobs:
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
       - name: Add preprod image URI on workflow dispatch
         run: |
-          echo "PREPROD_IMAGE_URI=170982004044.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp" >> $GITHUB_ENV
+          PREPROD_IMAGE_URI=170982004044.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp
+          echo "PREPROD_IMAGE_URI=$PREPROD_IMAGE_URI" >> $GITHUB_ENV
           PREPROD_IMAGE_HOST=$(echo $PREPROD_IMAGE_URI | cut -d'/' -f1)
           echo "PREPROD_IMAGE_HOST=$PREPROD_IMAGE_HOST" >> $GITHUB_ENV
       - name: Add prod image URI on workflow dispatch
         run: |
-          echo "PROD_IMAGE_URI=459740431552.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp" >> $GITHUB_ENV
+          PROD_IMAGE_URI=459740431552.dkr.ecr.us-east-2.amazonaws.com/warpbuild/runners:$IMAGE_TAG-macos-13-arm64-gh-warp
+          echo "PROD_IMAGE_URI=$PROD_IMAGE_URI" >> $GITHUB_ENV
           PROD_IMAGE_HOST=$(echo $PROD_IMAGE_URI | cut -d'/' -f1)
           echo "PROD_IMAGE_HOST=$PROD_IMAGE_HOST" >> $GITHUB_ENV
       - name: Add key to known_hosts
