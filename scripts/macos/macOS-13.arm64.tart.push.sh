@@ -64,9 +64,9 @@ login_pass=$(AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
 echo $login_pass | \
   tart login --username AWS --password-stdin $PREPROD_IMAGE_HOST
 
-echo "Pushing image to preprod to $PREPROD_IMAGE_URI"
-tart push s2 $PREPROD_IMAGE_URI
-echo "Pushed image to preprod"
+# echo "Pushing image to preprod to $PREPROD_IMAGE_URI"
+# tart push s2 $PREPROD_IMAGE_URI
+# echo "Pushed image to preprod"
 
 echo "Logging into ECR for prod with host $PROD_IMAGE_HOST"
 login_pass=$(AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \
