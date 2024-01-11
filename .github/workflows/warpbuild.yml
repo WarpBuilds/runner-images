@@ -168,6 +168,8 @@ jobs:
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'launchctl unload -w ~/Library/LaunchAgents/com.github.macos.imagebuilder.plist' || true
           # wait for the agent to unload
           sleep 5
+          # cleanup the logs from the previous run
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'rm -f ~/imagebuilder-stderr.log ~/imagebuilder-stdout.log'
           # load the agent
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'launchctl load -w ~/Library/LaunchAgents/com.github.macos.imagebuilder.plist'
 
