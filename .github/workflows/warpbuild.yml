@@ -122,8 +122,6 @@ jobs:
             
           export PACKER_LOG=1
 
-          cd images/macos
-          # make ci-pre-wb
           # make ci-wb
           make ci-post-wb
 
