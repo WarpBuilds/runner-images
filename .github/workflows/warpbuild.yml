@@ -78,12 +78,6 @@ jobs:
           set -e
 
           rm -rf ~/wb-mac-image-build.done || true
-          # cleanup log files
-          rm -rf ~/imagebuilder-stderr.log || true
-          rm -rf ~/imagebuilder-stdout.log || true
-          # recreate log files
-          touch ~/imagebuilder-stderr.log || true
-          touch ~/imagebuilder-stdout.log || true
 
           # configure git with the github token
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
