@@ -87,7 +87,9 @@ jobs:
           rm -rf ~/wb-mac-image-build.done || true
           rm -rf ~/wb-mac-image-build.failed || true
           ./wb-mac-image-build.sh
-          if [ $? -ne 0 ]; then
+          exit_code=\$?
+          echo "wb-mac-image-build.sh exited with code \$exit_code"
+          if [ \$exit_code -ne 0 ]; then
             echo "wb-mac-image-build.sh failed"
             touch ~/wb-mac-image-build.failed
             exit 1
