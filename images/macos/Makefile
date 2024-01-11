@@ -30,8 +30,8 @@ ci-post-wb:
 	AWS_SECRET_ACCESS_KEY=${PREPROD_AWS_SECRET_ACCESS_KEY} \
 	AWS_REGION=${PREPROD_AWS_REGION} \
 	aws ecr get-login-password | \
-	IMAGE_URL=${PREPROD_IMAGE_URL} \
-	tart login --username AWS --password-stdin ${IMAGE_URL}
+	IMAGE_HOST=${PREPROD_IMAGE_HOST} \
+	tart login --username AWS --password-stdin ${IMAGE_HOST}
 	echo "Pushing image to preprod"
 	tart push s2 ${IMAGE_URL}
 
@@ -40,7 +40,7 @@ ci-post-wb:
 	AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY} \
 	AWS_REGION=${PROD_AWS_REGION} \
 	aws ecr get-login-password | \
-	IMAGE_URL=${PROD_IMAGE_URL} \
-	tart login --username AWS --password-stdin ${IMAGE_URL}
+	IMAGE_URL=${PROD_IMAGE_HOST} \
+	tart login --username AWS --password-stdin ${IMAGE_HOST}
 	echo "Pushing image to prod"
 	tart push s2 ${IMAGE_URL}
