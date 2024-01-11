@@ -30,11 +30,11 @@ ci-post-wb:
 	AWS_REGION=${PREPROD_AWS_REGION} \
 	aws ecr get-login-password | \
 	IMAGE_URL=${PREPROD_IMAGE_URL} \
-	docker login --username AWS --password-stdin ${IMAGE_URL}
+	tart login --username AWS --password-stdin ${IMAGE_URL}
 
 	AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \
 	AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY} \
 	AWS_REGION=${PROD_AWS_REGION} \
 	aws ecr get-login-password | \
 	IMAGE_URL=${PROD_IMAGE_URL} \
-	docker login --username AWS --password-stdin ${IMAGE_URL}
+	tart login --username AWS --password-stdin ${IMAGE_URL}

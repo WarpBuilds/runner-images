@@ -78,6 +78,10 @@ jobs:
           set -e
 
           rm -rf ~/wb-mac-image-build.done || true
+          # cleanup log files
+          rm -rf ~/packer.log || true
+          rm -rf ~/imagebuilder-stderr.log || true
+          rm -rf ~/imagebuilder-stdout.log || true
 
           # configure git with the github token
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
@@ -117,8 +121,8 @@ jobs:
           export PACKER_LOG_PATH=~/packer.log
 
           cd images/macos
-          make ci-pre-wb
-          make ci-wb
+          # make ci-pre-wb
+          # make ci-wb
           make ci-post-wb
 
           touch ~/wb-mac-image-build.done
