@@ -142,7 +142,8 @@ jobs:
               <key>ProgramArguments</key>
               <array>
                   <string>/bin/bash</string>
-                  <string>/Users/${{ secrets.MACOS_USERNAME }}/wb-mac-image-build.sh</string>
+                  <string>-c</string>
+                  <string>. /Users/${{ secrets.MACOS_USERNAME }}/.bashrc; /Users/${{ secrets.MACOS_USERNAME }}/wb-mac-image-build.sh</string>
               </array>
               <key>WorkingDirectory</key>
               <string>/Users/${{ secrets.MACOS_USERNAME }}</string>
@@ -159,6 +160,11 @@ jobs:
       - name: Transfer and Load Launch Agent
         run: |
           scp -o StrictHostKeyChecking=no com.github.macos.imagebuilder.plist ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }}:~/Library/LaunchAgents/
+          # unload the agent if it's already loaded
+          ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'launchctl unload -w ~/Library/LaunchAgents/com.github.macos.imagebuilder.plist' || true
+          # wait for the agent to unload
+          sleep 5
+          # load the agent
           ssh ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'launchctl load -w ~/Library/LaunchAgents/com.github.macos.imagebuilder.plist'
 
       - name: Monitor
