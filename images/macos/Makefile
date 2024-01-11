@@ -25,18 +25,22 @@ ci-wb:
 		templates/warpbuild.pkr.hcl
 
 ci-post-wb:
+	echo "Logging into ECR for preprod"
 	AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
 	AWS_SECRET_ACCESS_KEY=${PREPROD_AWS_SECRET_ACCESS_KEY} \
 	AWS_REGION=${PREPROD_AWS_REGION} \
 	aws ecr get-login-password | \
 	IMAGE_URL=${PREPROD_IMAGE_URL} \
 	tart login --username AWS --password-stdin ${IMAGE_URL}
+	echo "Pushing image to preprod"
 	tart push s2 ${IMAGE_URL}
 
+	echo "Logging into ECR for prod"
 	AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \
 	AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY} \
 	AWS_REGION=${PROD_AWS_REGION} \
 	aws ecr get-login-password | \
 	IMAGE_URL=${PROD_IMAGE_URL} \
 	tart login --username AWS --password-stdin ${IMAGE_URL}
+	echo "Pushing image to prod"
 	tart push s2 ${IMAGE_URL}
