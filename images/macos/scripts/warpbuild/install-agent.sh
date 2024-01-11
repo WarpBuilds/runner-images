@@ -1,10 +1,8 @@
-#!/bin/bash 
+#!/bin/bash -e -o pipefail
 ################################################################################
 ##  File:  install-agent.sh
 ##  Desc:  Installs and configures warpbuild agent
 ################################################################################
-
-set -e -o pipefail
 
 source ~/utils/utils.sh
 

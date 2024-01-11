@@ -1,6 +1,4 @@
-#!/bin/bash
-
-set -e -o pipefail
+#!/bin/bash -e -o pipefail
 
 RUNNER_USER='runner'
 RUNNER_PASS='runner'

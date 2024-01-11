@@ -1,7 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e -o pipefail
 
 echo "Setting up system ..."
-set -e -o pipefail
 
 # check if password is set
 if [ -z "$PASSWORD" ]; then
