@@ -86,12 +86,16 @@ jobs:
           set -e
 
           rm -rf ~/wb-mac-image-build.done || true
+          rm -rf ~/wb-mac-image-build.failed || true
           ./wb-mac-image-build.sh
           if [ $? -ne 0 ]; then
             echo "wb-mac-image-build.sh failed"
             touch ~/wb-mac-image-build.failed
             exit 1
           fi
+
+          echo "wb-mac-image-build.sh completed successfully"
+          echo "creating the done file"
 
           touch ~/wb-mac-image-build.done
           EOF
