@@ -169,6 +169,8 @@ jobs:
 
       - name: Monitor
         run: |
+          echo "Some log lines will be missed. To get the complete logs vnc into the mac machine"
+
           # Start tailing the log file
           ssh -f ${{ secrets.MACOS_USERNAME }}@${{ secrets.MACOS_HOST }} 'tail -f ~/packer.log' &
 
