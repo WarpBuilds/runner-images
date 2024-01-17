@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p /runner
 cd /runner
 curl -f -L -o runner.tar.gz https://github.com/actions/runner/releases/download/v2.311.0/actions-runner-linux-x64-2.311.0.tar.gz \
         && tar xzf ./runner.tar.gz \

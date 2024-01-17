@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p /runner
 cd /runner
 curl -f -L -o warpbuild-agent.tar.gz https://github.com/WarpBuilds/warpbuild-agent/releases/download/v0.2.1-alpha.2/warpbuild-agentd_Linux_x86_64.tar.gz
 mkdir warpbuild-agent/
