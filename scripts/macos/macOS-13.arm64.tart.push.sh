@@ -65,7 +65,7 @@ echo $login_pass | \
   tart login --username AWS --password-stdin $PREPROD_IMAGE_HOST
 
 echo "Pushing image to preprod to $PREPROD_IMAGE_URI"
-tart push s2 $PREPROD_IMAGE_URI
+tart push m13 $PREPROD_IMAGE_URI
 echo "Pushed image to preprod"
 
 echo "Logging into ECR for prod with host $PROD_IMAGE_HOST"
@@ -78,5 +78,5 @@ echo $login_pass | \
   tart login --username AWS --password-stdin $PROD_IMAGE_HOST
 
 echo "Pushing image to prod to $PROD_IMAGE_URI"
-tart push s2 $PROD_IMAGE_URI
+tart push m13 $PROD_IMAGE_URI
 echo "Pushed image to prod"

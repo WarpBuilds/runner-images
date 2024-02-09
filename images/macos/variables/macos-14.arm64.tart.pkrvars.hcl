@@ -1,4 +1,4 @@
-vm_name = "s2"
+vm_name = "m14"
 github_api_pat = ""
 build_id = "20240116.1"
 xcode_install_storage_url = ""
