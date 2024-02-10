@@ -105,7 +105,10 @@ function Invoke-DownloadWithRetry {
 }
 
 function isVeertu {
-    return (Test-Path -Path "/Library/Application Support/Veertu")
+    return (
+        (Test-Path -Path "/Library/Application Support/Veertu") -or 
+        (Test-Path -Path "/Library/Application Support/Tart")
+    )
 }
 
 function Get-Architecture {
