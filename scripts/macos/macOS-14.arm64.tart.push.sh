@@ -5,11 +5,11 @@ source scripts/utils.sh
 cd images/macos
 
 # Check Preprod env vars
-check_env PREPROD_IMAGE_HOST
-check_env PREPROD_AWS_ACCESS_KEY_ID
-check_env PREPROD_AWS_SECRET_ACCESS_KEY
-check_env PREPROD_AWS_REGION
-check_env PREPROD_IMAGE_URI
+check_env "PREPROD_IMAGE_HOST"
+check_env "PREPROD_AWS_ACCESS_KEY_ID"
+check_env "PREPROD_AWS_SECRET_ACCESS_KEY"
+check_env "PREPROD_AWS_REGION"
+check_env "PREPROD_IMAGE_URI"
 
 echo "Logging into ECR for preprod with host $PREPROD_IMAGE_HOST"
 login_pass=$(AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
@@ -31,11 +31,11 @@ if [[ $1 != "--prod" ]]; then
 fi
 
 # Check Prod env vars
-check_env PROD_IMAGE_HOST
-check_env PROD_AWS_ACCESS_KEY_ID
-check_env PROD_AWS_SECRET_ACCESS_KEY
-check_env PROD_AWS_REGION
-check_env PROD_IMAGE_URI
+check_env "PROD_IMAGE_HOST"
+check_env "PROD_AWS_ACCESS_KEY_ID"
+check_env "PROD_AWS_SECRET_ACCESS_KEY"
+check_env "PROD_AWS_REGION"
+check_env "PROD_IMAGE_URI"
 
 echo "Logging into ECR for prod with host $PROD_IMAGE_HOST"
 login_pass=$(AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \
