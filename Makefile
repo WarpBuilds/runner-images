@@ -7,5 +7,10 @@ ci-wb:
 
 ci-post-wb:
 	# run bash script at  scripts/macos/macOS-14.arm64.tart.push.sh
-	echo "Pushing to macOS-14.arm64.tart"
+	echo "Pushing to macOS-14.arm64.tart [PREPROD]"
 	@sh scripts/macos/macOS-14.arm64.tart.push.sh
+
+ci-post-wb-prod:
+	# run bash script at  scripts/macos/macOS-14.arm64.tart.push.sh
+	echo "Pushing to macOS-14.arm64.tart [PREPROD & PROD]"
+	@sh scripts/macos/macOS-14.arm64.tart.push.sh --prod

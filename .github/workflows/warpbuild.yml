@@ -145,7 +145,7 @@ jobs:
           export PACKER_LOG=1
 
           make ci-wb
-          make ci-post-wb
+          make ci-post-wb-prod
 
           EOF
 
