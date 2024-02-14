@@ -146,7 +146,6 @@ jobs:
           export PREPROD_IMAGE_URI=${{ env.PREPROD_IMAGE_URI }}
           export PROD_IMAGE_HOST=${{ env.PROD_IMAGE_HOST }}
           export PROD_IMAGE_URI=${{ env.PROD_IMAGE_URI }}
-          export GITHUB_API_PAT=${{ secrets.GITHUB_TOKEN }}
 
           echo "Current path variable: $PATH"
             
@@ -355,7 +354,6 @@ jobs:
           export PREPROD_IMAGE_URI=${{ env.PREPROD_IMAGE_URI }}
           export PROD_IMAGE_HOST=${{ env.PROD_IMAGE_HOST }}
           export PROD_IMAGE_URI=${{ env.PROD_IMAGE_URI }}
-          export GITHUB_API_PAT=${{ secrets.GITHUB_TOKEN }}
 
           echo "Current path variable: $PATH"
             
