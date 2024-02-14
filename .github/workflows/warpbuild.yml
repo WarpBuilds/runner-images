@@ -153,7 +153,7 @@ jobs:
           export PACKER_LOG=1
 
           make ci-wb v=14 env=${{ github.event.inputs.warpenv }}
-          make ci-post-wb-prod v=14 env=${{ github.event.inputs.warpenv }}
+          make ci-post-wb v=14 env=${{ github.event.inputs.warpenv }}
 
           EOF
 
