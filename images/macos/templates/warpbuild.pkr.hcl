@@ -23,11 +23,6 @@ variable "vm_password" {
   sensitive = true
 }
 
-variable "github_api_pat" {
-  type = string
-  default = ""
-}
-
 variable "vcpu_count" {
   type = number
   default = 6

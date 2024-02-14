@@ -27,11 +27,6 @@ variable "vm_password" {
   sensitive = true
 }
 
-variable "github_api_pat" {
-  type = string
-  default = ""
-}
-
 variable "vcpu_count" {
   type = number
   default = 6
@@ -404,7 +399,6 @@ build {
       "./scripts/build/install-common-utils.sh"
     ]
     environment_vars = [
-      "API_PAT=${var.github_api_pat}",
       "USER_PASSWORD=${var.vm_password}"
     ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
@@ -436,9 +430,6 @@ build {
       "./scripts/build/install-chrome.sh",
       "./scripts/build/install-bicep.sh",
       "./scripts/build/install-codeql-bundle.sh"
-    ]
-    environment_vars = [
-      "API_PAT=${var.github_api_pat}"
     ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
   }

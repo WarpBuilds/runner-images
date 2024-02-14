@@ -31,11 +31,6 @@ variable "vm_password" {
   sensitive = true
 }
 
-variable "github_api_pat" {
-  type = string
-  default = ""
-}
-
 variable "vcpu_count" {
   type = number
   default = 6
@@ -187,7 +182,7 @@ build {
   }
 
   provisioner "shell" {
-    environment_vars = ["API_PAT=${var.github_api_pat}", "USER_PASSWORD=${var.vm_password}", "IMAGE_FOLDER=${local.image_folder}"]
+    environment_vars = ["USER_PASSWORD=${var.vm_password}", "IMAGE_FOLDER=${local.image_folder}"]
     execute_command  = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
     pause_before     = "30s"
     scripts          = [
@@ -218,7 +213,7 @@ build {
   }
 
   provisioner "shell" {
-    environment_vars = ["API_PAT=${var.github_api_pat}", "IMAGE_FOLDER=${local.image_folder}"]
+    environment_vars = ["IMAGE_FOLDER=${local.image_folder}"]
     execute_command  = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
     scripts          = [
       "${path.root}/../scripts/build/install-actions-cache.sh",
