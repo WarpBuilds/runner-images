@@ -49,9 +49,20 @@ login_pass=$(AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
 echo $login_pass | \
   tart login --username AWS --password-stdin $PREPROD_IMAGE_HOST
 
+# Remove ecr-login credHelpers from docker config
+echo "Removing config from .docker/config.json"
+jq 'del(.credHelpers."'$PREPROD_IMAGE_HOST'")' ~/.docker/config.json > ~/.docker/config.json.new
+mv ~/.docker/config.json ~/.docker/config.json.bak
+mv ~/.docker/config.json.new ~/.docker/config.json
+
 echo "Pushing image to preprod to $PREPROD_IMAGE_URI"
 tart push $mac_image_name $PREPROD_IMAGE_URI
 echo "Pushed image to preprod"
+
+# Add ecr-login credHelpers back to docker config
+echo "Adding config back to .docker/config.json"
+rm ~/.docker/config.json
+mv ~/.docker/config.json.bak ~/.docker/config.json
 
 # Check if warp_env is not warpbuild-prod
 if [ "$warp_env" != "warpbuild-prod" ]; then
@@ -75,6 +86,17 @@ login_pass=$(AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \
 echo $login_pass | \
   tart login --username AWS --password-stdin $PROD_IMAGE_HOST
 
+# Remove ecr-login credHelpers from docker config
+echo "Removing config from .docker/config.json"
+jq 'del(.credHelpers."'$PROD_IMAGE_HOST'")' ~/.docker/config.json > ~/.docker/config.json.new
+mv ~/.docker/config.json ~/.docker/config.json.bak
+mv ~/.docker/config.json.new ~/.docker/config.json
+
 echo "Pushing image to prod to $PROD_IMAGE_URI"
 tart push $mac_image_name $PROD_IMAGE_URI
 echo "Pushed image to prod"
+
+# Add ecr-login credHelpers back to docker config
+echo "Adding config back to .docker/config.json"
+rm ~/.docker/config.json
+mv ~/.docker/config.json.bak ~/.docker/config.json
