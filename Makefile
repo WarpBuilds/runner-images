@@ -14,20 +14,9 @@
 # make ci-wb v=14
 
 ci-wb:
-	ifndef v
-		$(error v is not set)
-	endif
 	@echo "Building for macOS-$(v).arm64.tart"
 	@sh scripts/macos/macOS-$(v).arm64.tart.build.sh
 
 ci-post-wb:
-	ifndef env
-		$(error env is not set)
-	endif
-
-	ifndef v
-		$(error v is not set)
-	endif
-
 	@echo "Pushing to macOS-$(v).arm64.tart for [$(env)]";
-	@sh scripts/macos/macOS.arm64.tart.push.sh --warp-env=$(env) --mac-version=$(v);
+	@sh scripts/macos/macOS.arm64.tart.push.sh -e $(env) -v $(v);

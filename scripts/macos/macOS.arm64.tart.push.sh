@@ -2,21 +2,23 @@
 
 source scripts/utils.sh
 
-while [ $# -gt 0 ]; do
-  case "$1" in
-    --warp-env=*)
-      warp_env="${1#*=}"
-      ;;
-    --mac_version=*)
-      mac_image_name="m${1#*=}"
-      ;;
-    *)
-      printf "Error: Invalid argument.\n"
-      exit 1
+while getopts ":e:v:" opt; do
+  case $opt in
+    e) warp_env="$OPTARG"
+    ;;
+    v) mac_image_name="m$OPTARG"
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+    exit 1
+    ;;
   esac
-  shift
-done
 
+  case $OPTARG in
+    -*) echo "Option $opt needs a valid argument"
+    exit 1
+    ;;
+  esac
+done
 
 cd images/macos
 
