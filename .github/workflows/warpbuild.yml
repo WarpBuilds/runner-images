@@ -19,12 +19,12 @@ on:
         default: "v0.1.0"
       warpenv:
         type: choice
-        description: "Warpbuild environment (Note: prod pushes to all environments including prod)"
+        description: "Warpbuild environment (Note: warpbuild-prod pushes to all environments including prod)"
         required: true
         default: "warpbuild-1"
         options:
           - "warpbuild-1"
-          - "prod"
+          - "warpbuild-prod"
 
 jobs:
   macos-14-arm64:

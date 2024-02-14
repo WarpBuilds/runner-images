@@ -6,11 +6,11 @@
 # 	   values: 13 or 14
 #
 # env: environment
-# 	   values: prod for production, anything else for preproduction
+# 	   values: warpbuild-prod for production, anything else for preproduction
 
 # Usage examples:
-# make ci-wb v=13 env=prod
-# make ci-post-wb v=14 env=prod
+# make ci-wb v=13 env=warpbuild-prod
+# make ci-post-wb v=14 env=warpbuild-prod
 # make ci-wb v=14
 
 ci-wb:

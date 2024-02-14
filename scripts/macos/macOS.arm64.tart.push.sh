@@ -21,7 +21,7 @@ while getopts ":e:v:" opt; do
 done
 
 
-if [ "$warp_env" != "warpbuild-1" ] && [ "$warp_env" != "prod" ]; then
+if [ "$warp_env" != "warpbuild-1" ] && [ "$warp_env" != "warpbuild-prod" ]; then
   echo "Invalid environment: $warp_env"
   exit 1
 fi
@@ -53,8 +53,8 @@ echo "Pushing image to preprod to $PREPROD_IMAGE_URI"
 tart push $mac_image_name $PREPROD_IMAGE_URI
 echo "Pushed image to preprod"
 
-# Check if warp_env is not prod
-if [ "$warp_env" != "prod" ]; then
+# Check if warp_env is not warpbuild-prod
+if [ "$warp_env" != "warpbuild-prod" ]; then
   echo "Warp env is not prod, skipping prod push"
   exit 0
 fi
