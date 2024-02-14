@@ -20,6 +20,17 @@ while getopts ":e:v:" opt; do
   esac
 done
 
+
+if [ "$warp_env" != "warpbuild-1" ] && [ "$warp_env" != "prod" ]; then
+  echo "Invalid environment: $warp_env"
+  exit 1
+fi
+
+if [ "$mac_image_name" != "m14" ] && [ "$mac_image_name" != "m13" ]; then
+  echo "Invalid image name: $mac_image_name"
+  exit 1
+fi
+
 cd images/macos
 
 # Check Preprod env vars
