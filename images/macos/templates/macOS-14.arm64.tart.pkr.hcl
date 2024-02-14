@@ -248,6 +248,12 @@ build {
     ]
   }
 
+  provisioner "file" {
+    destination = "${path.root}/../../image-output/"
+    direction   = "download"
+    source      = "${local.image_folder}/output/"
+  }
+
   provisioner "shell" {
     scripts = [
       "./scripts/build/configure-hostname.sh"
