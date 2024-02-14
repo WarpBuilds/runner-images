@@ -248,12 +248,6 @@ build {
     ]
   }
 
-  provisioner "file" {
-    destination = "${path.root}/../../image-output/"
-    direction   = "download"
-    source      = "${local.image_folder}/output/"
-  }
-
   provisioner "shell" {
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
     scripts         = ["${path.root}/../scripts/build/configure-hostname.sh"]
