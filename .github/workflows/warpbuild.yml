@@ -8,16 +8,18 @@ on:
         type: choice
         description: "Image name"
         required: true
+        default: "all"
         options:
           - "macos-13-arm64"
           - "macos-14-arm64"
+          - "all"
       tag:
         description: "Image tag"
         required: true
         default: "v0.1.0"
       warpenv:
         type: choice
-        description: "Warpbuild environment"
+        description: "Warpbuild environment (Note: prod pushes to all environments including prod)"
         required: true
         default: "warpbuild-1"
         options:
@@ -31,6 +33,7 @@ jobs:
     concurrency:
       group: macos-ssh
     runs-on: warp-ubuntu-latest-x64-2x
+    if: github.event.inputs.image == 'macos-14-arm64' || github.event.inputs.image == 'all'
     env:
       XCODE_INSTALL_STORAGE_URL: ${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
       PREPROD_AWS_ACCESS_KEY_ID: ${{ secrets.PREPROD_AWS_ACCESS_KEY_ID }}
@@ -237,7 +240,7 @@ jobs:
     # we want to build only one image at a time since the mac machine is a shared resource
     concurrency:
       group: macos-ssh
-    # if: github.event.inputs.image == 'macos-13-arm64'
+    if: github.event.inputs.image == 'macos-13-arm64' || github.event.inputs.image == 'all'
     runs-on: warp-ubuntu-latest-x64-2x
     env:
       XCODE_INSTALL_STORAGE_URL: ${{ secrets.MACOS_XCODE_INSTALL_STORAGE_URL }}
