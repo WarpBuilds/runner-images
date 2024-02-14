@@ -1,26 +1,33 @@
-.PHONY: ci-wb
+.PHONY: ci-wb ci-post-wb
+
+
+# Arguments:
+# v:   macOS version 
+# 	   values: 13 or 14
+#
+# env: environment
+# 	   values: prod for production, anything else for preproduction
+
+# Usage examples:
+# make ci-wb v=13 env=prod
+# make ci-post-wb v=14 env=prod
+# make ci-wb v=14
 
 ci-wb:
-	# run bash script at  scripts/macos/macOS-14.arm64.tart.build.sh
-	echo "Building for macOS-14.arm64.tart"
-	@sh scripts/macos/macOS-14.arm64.tart.build.sh
+	ifndef v
+		$(error v is not set)
+	endif
+	@echo "Building for macOS-$(v).arm64.tart"
+	@sh scripts/macos/macOS-$(v).arm64.tart.build.sh
 
 ci-post-wb:
-	# run bash script at  scripts/macos/macOS-14.arm64.tart.push.sh
-	echo "Pushing to macOS-14.arm64.tart [PREPROD]"
-	@sh scripts/macos/macOS-14.arm64.tart.push.sh
+	ifndef env
+		$(error env is not set)
+	endif
 
-ci-post-wb-prod:
-	# run bash script at  scripts/macos/macOS-14.arm64.tart.push.sh
-	echo "Pushing to macOS-14.arm64.tart [PREPROD & PROD]"
-	@sh scripts/macos/macOS-14.arm64.tart.push.sh --prod
+	ifndef v
+		$(error v is not set)
+	endif
 
-ci-wb-13:
-	# run bash script at  scripts/macos/macOS-13.arm64.tart.build.sh
-	echo "Building for macOS-13.arm64.tart"
-	@sh scripts/macos/macOS-13.arm64.tart.build.sh
-
-ci-post-wb-13:
-	# run bash script at  scripts/macos/macOS-13.arm64.tart.push.sh
-	echo "Pushing to macOS-13.arm64.tart [PREPROD & PROD]"
-	@sh scripts/macos/macOS-13.arm64.tart.push.sh
+	@echo "Pushing to macOS-$(v).arm64.tart for [$(env)]";
+	@sh scripts/macos/macOS.arm64.tart.push.sh --warp-env=$(env) --mac-version=$(v);

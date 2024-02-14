@@ -1,15 +1,59 @@
 #!/bin/bash
+set -e
 
-source scripts/utils.sh
 
 cd images/macos
 
-# Check Preprod env vars
-check_env "PREPROD_IMAGE_HOST"
-check_env "PREPROD_AWS_ACCESS_KEY_ID"
-check_env "PREPROD_AWS_SECRET_ACCESS_KEY"
-check_env "PREPROD_AWS_REGION"
-check_env "PREPROD_IMAGE_URI"
+# check if PREPROD_IMAGE_HOST is set
+if [ -z "${PREPROD_IMAGE_HOST}" ]; then
+  echo "PREPROD_IMAGE_HOST is not set"
+  exit 1
+fi
+# check if PREPROD_AWS_ACCESS_KEY_ID is set
+if [ -z "${PREPROD_AWS_ACCESS_KEY_ID}" ]; then
+  echo "PREPROD_AWS_ACCESS_KEY_ID is not set"
+  exit 1
+fi
+# check if PREPROD_AWS_SECRET_ACCESS_KEY is set
+if [ -z "${PREPROD_AWS_SECRET_ACCESS_KEY}" ]; then
+  echo "PREPROD_AWS_SECRET_ACCESS_KEY is not set"
+  exit 1
+fi
+# check if PREPROD_AWS_REGION is set
+if [ -z "${PREPROD_AWS_REGION}" ]; then
+  echo "PREPROD_AWS_REGION is not set"
+  exit 1
+fi
+# check if PREPROD_IMAGE_URI is set
+if [ -z "${PREPROD_IMAGE_URI}" ]; then
+  echo "PREPROD_IMAGE_URI is not set"
+  exit 1
+fi
+# check if PROD_IMAGE_HOST is set
+if [ -z "${PROD_IMAGE_HOST}" ]; then
+  echo "PROD_IMAGE_HOST is not set"
+  exit 1
+fi
+# check if PROD_AWS_ACCESS_KEY_ID is set
+if [ -z "${PROD_AWS_ACCESS_KEY_ID}" ]; then
+  echo "PROD_AWS_ACCESS_KEY_ID is not set"
+  exit 1
+fi
+# check if PROD_AWS_SECRET_ACCESS_KEY is set
+if [ -z "${PROD_AWS_SECRET_ACCESS_KEY}" ]; then
+  echo "PROD_AWS_SECRET_ACCESS_KEY is not set"
+  exit 1
+fi
+# check if PROD_AWS_REGION is set
+if [ -z "${PROD_AWS_REGION}" ]; then
+  echo "PROD_AWS_REGION is not set"
+  exit 1
+fi
+# check if PROD_IMAGE_URI is set
+if [ -z "${PROD_IMAGE_URI}" ]; then
+  echo "PROD_IMAGE_URI is not set"
+  exit 1
+fi
 
 echo "Logging into ECR for preprod with host $PREPROD_IMAGE_HOST"
 login_pass=$(AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
@@ -23,19 +67,6 @@ echo $login_pass | \
 echo "Pushing image to preprod to $PREPROD_IMAGE_URI"
 tart push m14 $PREPROD_IMAGE_URI
 echo "Pushed image to preprod"
-
-# Check --prod flag
-if [[ $1 != "--prod" ]]; then
-  echo "Not pushing to prod"
-  exit 0
-fi
-
-# Check Prod env vars
-check_env "PROD_IMAGE_HOST"
-check_env "PROD_AWS_ACCESS_KEY_ID"
-check_env "PROD_AWS_SECRET_ACCESS_KEY"
-check_env "PROD_AWS_REGION"
-check_env "PROD_IMAGE_URI"
 
 echo "Logging into ECR for prod with host $PROD_IMAGE_HOST"
 login_pass=$(AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID} \

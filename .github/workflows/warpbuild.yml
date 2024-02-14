@@ -15,6 +15,14 @@ on:
         description: "Image tag"
         required: true
         default: "v0.1.0"
+      warpenv:
+        type: choice
+        description: "Warpbuild environment"
+        required: true
+        default: "warpbuild-1"
+        options:
+          - "warpbuild-1"
+          - "prod"
 
 jobs:
   macos-14-arm64:
@@ -144,8 +152,8 @@ jobs:
             
           export PACKER_LOG=1
 
-          make ci-wb
-          make ci-post-wb-prod
+          make ci-wb v=14 env=${{ github.event.inputs.warpenv }}
+          make ci-post-wb-prod v=14 env=${{ github.event.inputs.warpenv }}
 
           EOF
 
@@ -353,8 +361,8 @@ jobs:
             
           export PACKER_LOG=1
 
-          make ci-wb-13
-          make ci-post-wb-13
+          make ci-wb v=13 env=${{ github.event.inputs.warpenv }}
+          make ci-post-wb v=13 env=${{ github.event.inputs.warpenv }}
 
           EOF
 
