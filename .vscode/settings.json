@@ -21,6 +21,5 @@
   ],
   "shellcheck.customArgs": [
     "-x"
-  ],
-  "workbench.colorCustomizations": {}
+  ]
 }
