@@ -1,7 +1,5 @@
 #!/bin/bash
 
-waagent -deprovision+user
-
 systemctl disable --now walinuxagent.service
 systemctl disable --now walinuxagent-network-setup.service
 

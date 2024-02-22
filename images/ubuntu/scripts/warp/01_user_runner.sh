@@ -22,4 +22,6 @@ echo 'root:root' | chpasswd
 # execute this in the new generalized VM once more to cleanup the users provisioned through azure
 waagent -deprovision+user
 
+mkdir -p /runner
+
 # continue with other scripts
