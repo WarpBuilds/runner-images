@@ -56,11 +56,16 @@ variable "xcode_install_sas" {
   default = ""
 }
 
+variable "disk_size_gb" {
+  type = number
+  default = 200
+}
+
 source "tart-cli" "tart" {
   vm_name      = "${var.vm_name}"
   cpu_count    = var.vcpu_count
   memory_gb    = var.ram_size
-  disk_size_gb = 200
+  disk_size_gb = var.disk_size_gb
   headless     = true
   ssh_password = var.vm_password
   ssh_username = var.vm_username
