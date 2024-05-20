@@ -93,11 +93,8 @@
     "azureModules": [
         {
             "name": "az",
-            "url" : "https://raw.githubusercontent.com/Azure/az-ps-module-versions/main/versions-manifest.json",
             "versions": [
                 "11.5.0"
-            ],
-            "zip_versions": [
             ]
         }
     ],
@@ -221,9 +218,13 @@
     ],
     "dotnet": {
         "aptPackages": [
+            "dotnet-sdk-6.0",
+            "dotnet-sdk-7.0",
             "dotnet-sdk-8.0"
         ],
         "versions": [
+            "6.0",
+            "7.0",
             "8.0"
         ],
         "tools": [
