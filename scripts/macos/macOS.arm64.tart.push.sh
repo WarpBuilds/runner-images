@@ -66,7 +66,7 @@ if [ "$warp_env" == "warpbuild-1" ]; then
   rm ~/.docker/config.json
   mv ~/.docker/config.json.bak ~/.docker/config.json
 
-end
+fi
 
 # Check if warp_env is not warpbuild-prod
 if [ "$warp_env" != "warpbuild-prod" ]; then
