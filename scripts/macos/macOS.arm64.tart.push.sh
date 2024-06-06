@@ -31,38 +31,42 @@ if [ "$mac_image_name" != "m14" ] && [ "$mac_image_name" != "m13" ]; then
   exit 1
 fi
 
-cd images/macos
+if [ "$warp_env" == "warpbuild-1" ]; then
 
-# Check Preprod env vars
-check_env "PREPROD_IMAGE_HOST"
-check_env "PREPROD_AWS_ACCESS_KEY_ID"
-check_env "PREPROD_AWS_SECRET_ACCESS_KEY"
-check_env "PREPROD_AWS_REGION"
-check_env "PREPROD_IMAGE_URI"
+  cd images/macos
 
-echo "Logging into ECR for preprod with host $PREPROD_IMAGE_HOST"
-login_pass=$(AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
-  AWS_SECRET_ACCESS_KEY=${PREPROD_AWS_SECRET_ACCESS_KEY} \
-  AWS_REGION=${PREPROD_AWS_REGION} \
-  aws ecr get-login-password)
+  # Check Preprod env vars
+  check_env "PREPROD_IMAGE_HOST"
+  check_env "PREPROD_AWS_ACCESS_KEY_ID"
+  check_env "PREPROD_AWS_SECRET_ACCESS_KEY"
+  check_env "PREPROD_AWS_REGION"
+  check_env "PREPROD_IMAGE_URI"
 
-echo $login_pass | \
-  tart login --username AWS --password-stdin $PREPROD_IMAGE_HOST
+  echo "Logging into ECR for preprod with host $PREPROD_IMAGE_HOST"
+  login_pass=$(AWS_ACCESS_KEY_ID=${PREPROD_AWS_ACCESS_KEY_ID} \
+    AWS_SECRET_ACCESS_KEY=${PREPROD_AWS_SECRET_ACCESS_KEY} \
+    AWS_REGION=${PREPROD_AWS_REGION} \
+    aws ecr get-login-password)
 
-# Remove ecr-login credHelpers from docker config
-echo "Removing config from .docker/config.json"
-jq 'del(.credHelpers."'$PREPROD_IMAGE_HOST'")' ~/.docker/config.json > ~/.docker/config.json.new
-mv ~/.docker/config.json ~/.docker/config.json.bak
-mv ~/.docker/config.json.new ~/.docker/config.json
+  echo $login_pass | \
+    tart login --username AWS --password-stdin $PREPROD_IMAGE_HOST
 
-echo "Pushing image to preprod to $PREPROD_IMAGE_URI"
-tart push $mac_image_name $PREPROD_IMAGE_URI
-echo "Pushed image to preprod"
+  # Remove ecr-login credHelpers from docker config
+  echo "Removing config from .docker/config.json"
+  jq 'del(.credHelpers."'$PREPROD_IMAGE_HOST'")' ~/.docker/config.json > ~/.docker/config.json.new
+  mv ~/.docker/config.json ~/.docker/config.json.bak
+  mv ~/.docker/config.json.new ~/.docker/config.json
 
-# Add ecr-login credHelpers back to docker config
-echo "Adding config back to .docker/config.json"
-rm ~/.docker/config.json
-mv ~/.docker/config.json.bak ~/.docker/config.json
+  echo "Pushing image to preprod to $PREPROD_IMAGE_URI"
+  tart push $mac_image_name $PREPROD_IMAGE_URI
+  echo "Pushed image to preprod"
+
+  # Add ecr-login credHelpers back to docker config
+  echo "Adding config back to .docker/config.json"
+  rm ~/.docker/config.json
+  mv ~/.docker/config.json.bak ~/.docker/config.json
+
+end
 
 # Check if warp_env is not warpbuild-prod
 if [ "$warp_env" != "warpbuild-prod" ]; then
