@@ -4,4 +4,4 @@ xcode_install_storage_url = ""
 xcode_install_sas = ""
 vm_username = "runner"
 vm_password = "admin"
-disk_size_gb = 250
+disk_size_gb = 400
