@@ -10,7 +10,7 @@ echo "Creating warpbuild directories ..."
 mkdir -p ~/.warpbuild/agent
 
 BASE_DIR=$(echo ~/.warpbuild/agent)
-VERSION=v0.2.0-alpha.1
+VERSION=v0.3.0
 USERNAME=$(whoami)
 
 echo "Downloading warpbuild-agentd $VERSION..."
@@ -84,5 +84,8 @@ mkdir -p $LAUNCH_AGENTS_DIR
 mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
 echo "Loading agent ..."
 launchctl load -w $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist || true
+
+echo "Give permission to runner user to read /var/log/system.log"
+sudo chmod +a "runner allow read" /var/log/system.log
 
 echo "Agent setup complete."
