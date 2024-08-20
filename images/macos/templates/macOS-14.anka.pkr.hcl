@@ -91,7 +91,7 @@ source "null" "template" {
   ssh_host = "${var.source_vm_name}"
   ssh_port = "${var.source_vm_port}"
   ssh_username = "${var.vm_username}"
-  ssh_private_key_file = "${var.vm_password}"
+  ssh_password = "${var.vm_password}"
   ssh_proxy_host = "${var.socks_proxy}"
 }
 
@@ -152,7 +152,7 @@ build {
       "mv ${local.image_folder}/docs-gen ${local.image_folder}/software-report",
       "mv ${local.image_folder}/xamarin-selector ${local.image_folder}/assets",
       "mkdir ~/utils",
-      "mv ${local.image_folder}/helpers/confirm-identified-developers.scpt ~/utils",
+      "mv ${local.image_folder}/helpers/confirm-identified-developers-macos14.scpt ~/utils",
       "mv ${local.image_folder}/helpers/invoke-tests.sh ~/utils",
       "mv ${local.image_folder}/helpers/utils.sh ~/utils",
       "mv ${local.image_folder}/helpers/xamarin-utils.sh ~/utils"

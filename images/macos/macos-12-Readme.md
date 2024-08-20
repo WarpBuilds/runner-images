@@ -1,57 +1,54 @@
 | Announcements |
 |-|
-| [[macOS] Default Xcode on macOS 14 Sonoma will be set to Xcode 15.4 on July, 22](https://github.com/actions/runner-images/issues/10121) |
-| [[macOS] Default Xcode on macOS 13 Ventura will be set to Xcode 15.2 on July, 15](https://github.com/actions/runner-images/issues/10120) |
+| [[macOS] GCC 11 will be removed from all macOS images on August 12](https://github.com/actions/runner-images/issues/10213) |
 ***
 # macOS 12
-- OS Version: macOS 12.7.5 (21H1222)
+- OS Version: macOS 12.7.6 (21H1320)
 - Kernel Version: Darwin 21.6.0
-- Image Version: 20240707.1
+- Image Version: 20240811.1
 
 ## Installed Software
 
 ### Language and Runtime
-- .NET Core SDK: 6.0.423, 7.0.102, 7.0.202, 7.0.306, 7.0.410, 8.0.101, 8.0.204, 8.0.302
+- .NET Core SDK: 6.0.424, 7.0.102, 7.0.202, 7.0.306, 7.0.410, 8.0.101, 8.0.204, 8.0.303
 - Bash 3.2.57(1)-release
 - Clang/LLVM 14.0.0
 - Clang/LLVM (Homebrew) 15.0.7 - available on `$(brew --prefix llvm@15)/bin/clang`
-- GCC 11 (Homebrew GCC 11.4.0) - available by `gcc-11` alias
 - GCC 12 (Homebrew GCC 12.4.0) - available by `gcc-12` alias
 - GCC 13 (Homebrew GCC 13.3.0) - available by `gcc-13` alias
-- GCC 14 (Homebrew GCC 14.1.0_1) - available by `gcc-14` alias
-- GNU Fortran 11 (Homebrew GCC 11.4.0) - available by `gfortran-11` alias
+- GCC 14 (Homebrew GCC 14.1.0_2) - available by `gcc-14` alias
 - GNU Fortran 12 (Homebrew GCC 12.4.0) - available by `gfortran-12` alias
 - GNU Fortran 13 (Homebrew GCC 13.3.0) - available by `gfortran-13` alias
-- GNU Fortran 14 (Homebrew GCC 14.1.0_1) - available by `gfortran-14` alias
+- GNU Fortran 14 (Homebrew GCC 14.1.0_2) - available by `gfortran-14` alias
 - Julia 1.10.4
-- Kotlin 2.0.0-release-341
-- Go 1.21.12
+- Kotlin 2.0.10-release-540
+- Go 1.21.13
 - Mono 6.12.0.188
-- Node.js 18.20.3
+- Node.js 18.20.4
 - MSBuild 16.10.1.51301 (Mono 6.12.0.188)
 - NVM 0.39.7
-- NVM - Cached node versions: 16.20.2, 18.20.3, 20.15.0
+- NVM - Cached node versions: 16.20.2, 18.20.4, 20.16.0
 - Perl 5.38.2
-- PHP 8.3.9
+- PHP 8.3.10
 - Python 2.7.18
 - Python3 3.12.4
 - R 4.4.1
 - Ruby 3.0.7p220
 
 ### Package Management
-- Bundler 2.5.14
+- Bundler 2.5.17
 - Carthage 0.39.1
 - CocoaPods 1.15.2
 - Composer 2.7.7
-- Homebrew 4.3.8
+- Homebrew 4.3.14
 - Miniconda 24.5.0
 - NPM 10.7.0
 - NuGet 6.3.1.1
 - Pip 20.3.4 (python 2.7)
-- Pip3 24.1.2 (python 3.12)
+- Pip3 24.2 (python 3.12)
 - Pipx 1.6.0
-- RubyGems 3.5.14
-- Vcpkg 2024 (build from commit 576379156)
+- RubyGems 3.5.17
+- Vcpkg 2024 (build from commit e590c2b30)
 - Yarn 1.22.22
 
 #### Environment variables
@@ -63,58 +60,58 @@
 ### Project Management
 - Apache Ant 1.10.14
 - Apache Maven 3.9.8
-- Gradle 8.8
-- Sbt 1.10.0
+- Gradle 8.9
+- Sbt 1.10.1
 
 ### Utilities
 - 7-Zip 17.05
 - aria2 1.37.0
-- azcopy 10.25.1
+- azcopy 10.26.0
 - bazel 7.2.1
 - bazelisk 1.20.0
 - bsdtar 3.5.1 - available by 'tar' alias
-- Curl 8.8.0
-- Git 2.45.2
+- Curl 8.9.1
+- Git 2.46.0
 - Git LFS 3.5.1
-- GitHub CLI 2.52.0
+- GitHub CLI 2.54.0
 - GNU Tar 1.35 - available by 'gtar' alias
 - GNU Wget 1.24.5
 - gpg (GnuPG) 2.4.5
-- ImageMagick 7.1.1-34
+- ImageMagick 7.1.1-36
 - jq 1.7.1
-- mongo 5.0.27
-- mongod 5.0.27
+- mongo 5.0.28
+- mongod 5.0.28
 - OpenSSL 1.1.1w  11 Sep 2023
 - Packer 1.9.4
 - pkg-config 0.29.2
-- PostgreSQL 14.12 (Homebrew)
-- psql (PostgreSQL) 14.12 (Homebrew)
+- PostgreSQL 14.13 (Homebrew)
+- psql (PostgreSQL) 14.13 (Homebrew)
 - Sox 14.4.2
 - Subversion (SVN) 1.14.3
 - Switchaudio-osx 1.2.2
 - Vagrant 2.4.1
 - VirtualBox 6.1.38r153438
-- yq 4.44.2
+- yq 4.44.3
 - zstd 1.5.6
 
 ### Tools
 - App Center CLI 3.0.1
-- AWS CLI 2.17.9
-- AWS SAM CLI 1.120.0
+- AWS CLI 2.17.27
+- AWS SAM CLI 1.121.0
 - AWS Session Manager CLI 1.2.650.0
-- Azure CLI 2.61.0
+- Azure CLI 2.63.0
 - Azure CLI (azure-devops) 1.0.1
-- Bicep CLI 0.28.1
+- Bicep CLI 0.29.47
 - Cabal 3.10.3.0
-- Cmake 3.30.0
-- CodeQL Action Bundle 2.17.6
-- Colima 0.6.9
-- Fastlane 2.221.1
+- Cmake 3.30.2
+- CodeQL Action Bundle 2.18.1
+- Colima 0.7.1
+- Fastlane 2.222.0
 - GHC 9.10.1
 - GHCup 0.1.30.0
 - Jazzy 0.15.1
-- Stack 2.15.7
-- SwiftFormat 0.54.0
+- Stack 3.1.1
+- SwiftFormat 0.54.3
 - Swig 4.2.1
 - Xcbeautify 1.6.0
 - Xcode Command Line Tools 14.2.0.0.1.1668646533
@@ -125,16 +122,16 @@
 - Yamllint 1.35.1
 
 ### Browsers
-- Safari 17.5 (17618.2.12.111.5)
-- SafariDriver 17.5 (17618.2.12.111.5)
-- Google Chrome 126.0.6478.127
-- Google Chrome for Testing 126.0.6478.126
-- ChromeDriver 126.0.6478.126
-- Microsoft Edge 126.0.2592.87
-- Microsoft Edge WebDriver 126.0.2592.87
-- Mozilla Firefox 127.0.2
+- Safari 17.6 (17618.3.11.11.7)
+- SafariDriver 17.6 (17618.3.11.11.7)
+- Google Chrome 127.0.6533.100
+- Google Chrome for Testing 127.0.6533.99
+- ChromeDriver 127.0.6533.99
+- Microsoft Edge 127.0.2651.98
+- Microsoft Edge WebDriver 127.0.2651.97
+- Mozilla Firefox 129.0
 - geckodriver 0.34.0
-- Selenium server 4.22.0
+- Selenium server 4.23.0
 
 #### Environment variables
 | Name            | Value                                 |
@@ -144,12 +141,12 @@
 | GECKOWEBDRIVER  | /usr/local/opt/geckodriver/bin        |
 
 ### Java
-| Version             | Environment Variable |
-| ------------------- | -------------------- |
-| 8.0.412+8 (default) | JAVA_HOME_8_X64      |
-| 11.0.23+9           | JAVA_HOME_11_X64     |
-| 17.0.11+9           | JAVA_HOME_17_X64     |
-| 21.0.3+9.0          | JAVA_HOME_21_X64     |
+| Version               | Environment Variable |
+| --------------------- | -------------------- |
+| 8.0.422+5.1 (default) | JAVA_HOME_8_X64      |
+| 11.0.24+8             | JAVA_HOME_11_X64     |
+| 17.0.12+7             | JAVA_HOME_17_X64     |
+| 21.0.4+7.0            | JAVA_HOME_21_X64     |
 
 ### Cached Tools
 
@@ -174,33 +171,33 @@
 
 #### Node.js
 - 16.20.2
-- 18.20.3
-- 20.15.0
+- 18.20.4
+- 20.16.0
 
 #### Go
 - 1.20.14
-- 1.21.12
-- 1.22.5
+- 1.21.13
+- 1.22.6
 
 ### Rust Tools
-- Cargo 1.79.0
-- Rust 1.79.0
-- Rustdoc 1.79.0
+- Cargo 1.80.1
+- Rust 1.80.1
+- Rustdoc 1.80.1
 - Rustup 1.27.1
 
 #### Packages
 - Bindgen 0.69.4
 - Cargo-audit 0.20.0
 - Cargo-outdated 0.15.0
-- Cbindgen 0.26.0
-- Clippy 0.1.79
+- Cbindgen 0.27.0
+- Clippy 0.1.80
 - Rustfmt 1.7.0-stable
 
 ### PowerShell Tools
-- PowerShell 7.4.3
+- PowerShell 7.4.4
 
 #### PowerShell Modules
-- Az: 12.0.0
+- Az: 12.2.0
 - MarkdownPS: 1.10
 - Pester: 5.6.1
 - PSScriptAnalyzer: 1.22.0
@@ -208,7 +205,7 @@
 ### Web Servers
 | Name  | Version | ConfigFile                      | ServiceStatus | ListenPort |
 | ----- | ------- | ------------------------------- | ------------- | ---------- |
-| httpd | 2.4.61  | /usr/local/etc/httpd/httpd.conf | none          | 80         |
+| httpd | 2.4.62  | /usr/local/etc/httpd/httpd.conf | none          | 80         |
 | nginx | 1.27.0  | /usr/local/etc/nginx/nginx.conf | none          | 80         |
 
 ### Xamarin
@@ -217,7 +214,7 @@
 | Version        | Build       | Path                                 |
 | -------------- | ----------- | ------------------------------------ |
 | 2019           | 8.10.25.2   | /Applications/Visual Studio 2019.app |
-| 2022 (default) | 17.6.12.410 | /Applications/Visual Studio.app      |
+| 2022 (default) | 17.6.13.424 | /Applications/Visual Studio.app      |
 
 ##### Notes
 ```
@@ -337,10 +334,10 @@ mv "/Applications/Visual Studio 2019.app" "/Applications/Visual Studio.app"
 | Package Name               | Version                                                                                                                                                                                                                 |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Android Command Line Tools | 8.0                                                                                                                                                                                                                     |
-| Android Emulator           | 34.2.15                                                                                                                                                                                                                 |
+| Android Emulator           | 34.2.16                                                                                                                                                                                                                 |
 | Android SDK Build-tools    | 35.0.0<br>34.0.0<br>33.0.0 33.0.1 33.0.2 33.0.3<br>32.0.0<br>31.0.0                                                                                                                                                     |
 | Android SDK Platforms      | android-35 (rev 1)<br>android-34-ext8 (rev 1)<br>android-34-ext12 (rev 1)<br>android-34 (rev 3)<br>android-33-ext5 (rev 1)<br>android-33-ext4 (rev 1)<br>android-33 (rev 3)<br>android-32 (rev 1)<br>android-31 (rev 1) |
-| Android SDK Platform-Tools | 35.0.1                                                                                                                                                                                                                  |
+| Android SDK Platform-Tools | 35.0.2                                                                                                                                                                                                                  |
 | Android Support Repository | 47.0.0                                                                                                                                                                                                                  |
 | CMake                      | 3.18.1<br>3.22.1                                                                                                                                                                                                        |
 | Google Play services       | 49                                                                                                                                                                                                                      |
