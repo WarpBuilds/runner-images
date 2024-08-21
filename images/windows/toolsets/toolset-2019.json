@@ -84,7 +84,7 @@
         {"name": "PowerShellGet"},
         {"name": "PSScriptAnalyzer"},
         {"name": "PSWindowsUpdate"},
-        {"name": "SqlServer"},
+        {"name": "SqlServer", "versions": ["22.2.0"]},
         {"name": "VSSetup"},
         {"name": "Microsoft.Graph"},
         {"name": "AWSPowershell"}
@@ -120,7 +120,7 @@
         {
             "name": "az",
             "versions": [
-                "11.3.1"
+                "12.1.0"
             ],
             "zip_versions": [
             ]
@@ -138,11 +138,7 @@
         "extras": [
             "android;m2repository",
             "google;m2repository",
-            "google;google_play_services",
-            "m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2",
-            "m2repository;com;android;support;constraint;constraint-layout-solver;1.0.1",
-            "m2repository;com;android;support;constraint;constraint-layout;1.0.2",
-            "m2repository;com;android;support;constraint;constraint-layout;1.0.1"
+            "google;google_play_services"
         ],
         "addons": [
             "addon-google_apis-google-24",
@@ -156,9 +152,9 @@
             "cmake;3.22.1"
         ],
         "ndk": {
-            "default": "25",
+            "default": "27",
             "versions": [
-                "24", "25", "26"
+                "26" , "27"
             ]
         }
     },
@@ -424,7 +420,7 @@
             { "name": "aria2" },
             { "name": "azcopy10" },
             { "name": "Bicep" },
-            { "name": "gitversion.portable" },
+            { "name": "gitversion.portable"},
             { "name": "innosetup" },
             { "name": "jq" },
             { "name": "NuGet.CommandLine" },
