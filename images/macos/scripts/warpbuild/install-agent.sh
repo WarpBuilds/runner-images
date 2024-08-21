@@ -188,7 +188,7 @@ LAUNCH_AGENTS_DIR=~/Library/LaunchAgents
 mkdir -p $LAUNCH_AGENTS_DIR
 mv $BASE_DIR/com.warpbuild.warpbuild-agentd-launcher.plist $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist
 mv $BASE_DIR/com.warpbuild.warpbuild-telemetryd-launcher.plist $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-telemetryd-launcher.plist
-mv $BASE_DIR/com.warpbuild.warpbuild-telemetryd-launcher.plist $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-proxyd-launcher.plist
+mv $BASE_DIR/com.warpbuild.warpbuild-proxyd-launcher.plist $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-proxyd-launcher.plist
 echo "Loading agent ..."
 launchctl load -w $LAUNCH_AGENTS_DIR/com.warpbuild.warpbuild-agentd-launcher.plist || true
 echo "Loading telemetry agent ..."
