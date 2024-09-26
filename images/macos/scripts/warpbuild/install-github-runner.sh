@@ -12,8 +12,8 @@ BASE_DIR=~/.warpbuild/github-runner
 
 TARGETARCH=arm64
 TARGETOS=osx
-RUNNER_VERSION='2.311.0'
-RUNNER_CONTAINER_HOOKS_VERSION='0.3.2'
+RUNNER_VERSION=$(curl -sL https://api.github.com/repos/actions/runner/releases/latest | jq -r '.tag_name' | sed 's/^v//')
+RUNNER_CONTAINER_HOOKS_VERSION=$(curl -sL https://api.github.com/repos/actions/runner-container-hooks/releases/latest | jq -r '.tag_name' | sed 's/^v//')
 RUNNER_ARCH=$TARGETARCH 
 
 curl -f -L -o $BASE_DIR/runner.tar.gz https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-${TARGETOS}-${RUNNER_ARCH}-${RUNNER_VERSION}.tar.gz 
