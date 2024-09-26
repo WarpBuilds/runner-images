@@ -18,5 +18,4 @@ ci-wb:
 	@sh scripts/macos/macOS-$(v).arm64.tart.build.sh
 
 ci-post-wb:
-	@echo "Pushing to macOS-$(v).arm64.tart for [$(env)]";
-	@sh scripts/macos/macOS.arm64.tart.push.sh -e $(env) -v $(v);
+	@sh scripts/macos/macOS.arm64.tart.push.sh;
