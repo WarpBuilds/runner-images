@@ -159,6 +159,7 @@ build {
     execute_command  = "chmod +x {{ .Path }}; source $HOME/.bash_profile; sudo {{ .Vars }} {{ .Path }}"
     scripts          = [
       "${path.root}/../scripts/build/configure-tccdb-macos.sh",
+      "${path.root}/../scripts/build/configure-autologin.sh",
       "${path.root}/../scripts/build/configure-auto-updates.sh",
       "${path.root}/../scripts/build/configure-ntpconf.sh",
       "${path.root}/../scripts/build/configure-shell.sh"
@@ -242,8 +243,9 @@ build {
   }
 
   provisioner "shell" {
-    execute_command = "source $HOME/.bash_profile; ruby {{ .Path }}"
-    script          = "${path.root}/../scripts/build/configure-xcode-simulators.rb"
+    environment_vars = ["IMAGE_FOLDER=${local.image_folder}"]
+    execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} pwsh -f {{ .Path }}"
+    script          = "${path.root}/../scripts/build/Configure-Xcode-Simulators.ps1"
   }
 
   provisioner "shell" {
@@ -255,9 +257,7 @@ build {
   }
 
   provisioner "shell" {
-    scripts = [
-      "./scripts/build/configure-hostname.sh"
-    ]
     execute_command = "chmod +x {{ .Path }}; source $HOME/.bash_profile; {{ .Vars }} {{ .Path }}"
+    scripts         = ["${path.root}/../scripts/build/configure-hostname.sh"]
   }
 }
