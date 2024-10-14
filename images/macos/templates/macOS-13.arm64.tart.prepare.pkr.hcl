@@ -42,7 +42,7 @@ variable "from_ipsw" {
   type = string
   # You can find macOS IPSW URLs on various websites like https://ipsw.me/
   # and https://www.theiphonewiki.com/wiki/Beta_Firmware/Mac/13.x
-  default = "https://updates.cdn-apple.com/2023SummerFCS/fullrestores/042-43686/945D434B-DA5D-48DB-A558-F6D18D11AD69/UniversalMac_13.5.2_22G91_Restore.ipsw"
+  default = "latest"
 }
 
 source "tart-cli" "tart" {
